@@ -1,0 +1,133 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Timeline – CMS – Well-Built Admin{% endblock %}
+{% block page_title %}Timeline Milestones{% endblock %}
+
+{% block extra_css %}
+<style>
+.tl-add-card {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: 12px; padding: 28px; margin-bottom: 32px;
+}
+.tl-add-card h3 {
+  font-family: var(--f-display); font-size: 1rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--c-gold); margin-bottom: 20px;
+}
+.tl-grid { display: flex; flex-direction: column; gap: 12px; }
+.tl-item {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.tl-item:hover { border-color: rgba(201,168,76,0.3); }
+.tl-item-head {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px; cursor: pointer; user-select: none;
+}
+.tl-year-badge {
+  font-family: var(--f-display); font-size: 1.1rem; font-weight: 800;
+  color: var(--c-gold); min-width: 52px;
+}
+.tl-item-title { font-size: 0.9rem; font-weight: 600; color: var(--c-text); flex: 1; }
+.tl-item-actions { display: flex; gap: 8px; }
+.tl-btn-edit {
+  padding: 5px 12px; background: rgba(59,130,246,0.12); color: #60a5fa;
+  border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.tl-btn-del {
+  padding: 5px 12px; background: rgba(239,68,68,0.12); color: #f87171;
+  border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.tl-edit-panel {
+  display: none; padding: 0 20px 20px;
+  border-top: 1px solid var(--c-border);
+}
+.tl-item.editing .tl-edit-panel { display: block; }
+.tl-edit-row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; margin-top: 16px; }
+.tl-edit-row input, .tl-edit-row textarea {
+  background: var(--c-panel); border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 10px 14px; color: var(--c-text);
+  font-size: 0.875rem; font-family: inherit; width: 100%;
+}
+.tl-edit-row input:focus, .tl-edit-row textarea:focus {
+  outline: none; border-color: var(--c-gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+}
+.tl-edit-body { grid-column: 1/-1; }
+.tl-save-btn {
+  margin-top: 12px; padding: 9px 20px;
+  background: var(--c-gold); color: var(--c-bg);
+  border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.empty-tl {
+  text-align: center; padding: 60px; color: var(--c-muted); font-size: 0.9rem;
+}
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<a href="{{ url_for('admin_cms') }}" style="font-size:0.875rem;color:var(--c-muted);display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;transition:color 0.2s" onmouseover="this.style.color='var(--c-gold)'" onmouseout="this.style.color='var(--c-muted)'">← Back to CMS Hub</a>
+
+<!-- Add new milestone -->
+<div class="tl-add-card">
+  <h3>+ Add New Milestone</h3>
+  <form method="POST" action="{{ url_for('admin_cms_timeline_add') }}">
+    <div class="tl-edit-row">
+      <input type="text" name="year" placeholder="Year (e.g. 2026)" required>
+      <input type="text" name="title" placeholder="Milestone title (e.g. 500th Project)" required>
+      <textarea name="body" rows="2" placeholder="Description of this milestone…" class="tl-edit-body" required></textarea>
+    </div>
+    <button type="submit" class="tl-save-btn">Add Milestone</button>
+  </form>
+</div>
+
+<!-- Existing milestones -->
+<div class="admin-section">
+  <h2 class="admin-section-title">Existing Milestones ({{ timeline|length }})</h2>
+  {% if timeline %}
+  <div class="tl-grid">
+    {% for item in timeline %}
+    <div class="tl-item" id="tl-{{ item.id }}">
+      <div class="tl-item-head" onclick="toggleEdit({{ item.id }})">
+        <span class="tl-year-badge">{{ item.year }}</span>
+        <span class="tl-item-title">{{ item.title }}</span>
+        <div class="tl-item-actions" onclick="event.stopPropagation()">
+          <button class="tl-btn-edit" onclick="toggleEdit({{ item.id }})">Edit</button>
+          <form method="POST" action="{{ url_for('admin_cms_timeline_delete', tid=item.id) }}"
+                onsubmit="return confirm('Delete this milestone?')" style="display:inline">
+            <button type="submit" class="tl-btn-del">Delete</button>
+          </form>
+        </div>
+      </div>
+      <div class="tl-edit-panel">
+        <form method="POST" action="{{ url_for('admin_cms_timeline_edit', tid=item.id) }}">
+          <div class="tl-edit-row">
+            <input type="text" name="year" value="{{ item.year }}" placeholder="Year" required>
+            <input type="text" name="title" value="{{ item.title }}" placeholder="Title" required>
+            <textarea name="body" rows="2" class="tl-edit-body" required>{{ item.body }}</textarea>
+          </div>
+          <button type="submit" class="tl-save-btn">Save Changes</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-tl">No milestones yet. Add your first one above.</div>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleEdit(id) {
+  const el = document.getElementById('tl-' + id);
+  el.classList.toggle('editing');
+}
+</script>
+{% endblock %}

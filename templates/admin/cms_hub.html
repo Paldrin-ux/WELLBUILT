@@ -1,0 +1,127 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}CMS Editor – Well-Built Admin{% endblock %}
+{% block page_title %}CMS Editor{% endblock %}
+
+{% block admin_content %}
+<div class="admin-section">
+  <p style="font-size:0.9rem;color:var(--c-muted);margin-bottom:32px;max-width:640px;line-height:1.6;">
+    The CMS Editor lets you change <strong style="color:var(--c-text)">every word, title, subtitle, button label, and image</strong> visible on the public-facing website — no code required. Pick a page below to start editing.
+  </p>
+
+  <div class="cms-hub-grid">
+
+    <a href="{{ url_for('admin_cms_page', page='global') }}" class="cms-hub-card">
+      <div class="chc-icon">🌐</div>
+      <div class="chc-body">
+        <h3>Global Settings</h3>
+        <p>Navbar logo & links, footer text, contact details, copyright line.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_page', page='home') }}" class="cms-hub-card">
+      <div class="chc-icon">🏠</div>
+      <div class="chc-body">
+        <h3>Home Page</h3>
+        <p>Hero headline, subtitle, stats, services teaser, why-us cards, CTA section, clients list.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_page', page='about') }}" class="cms-hub-card">
+      <div class="chc-icon">🏗️</div>
+      <div class="chc-body">
+        <h3>About Page</h3>
+        <p>Who We Are text, stat numbers, and milestone timeline.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_timeline') }}" class="cms-hub-card">
+      <div class="chc-icon">📅</div>
+      <div class="chc-body">
+        <h3>Timeline Milestones</h3>
+        <p>Add, edit, reorder, or delete the company milestone entries on the About page.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_page', page='services') }}" class="cms-hub-card">
+      <div class="chc-icon">⚙️</div>
+      <div class="chc-body">
+        <h3>Services Page</h3>
+        <p>Page header and CTA text for the Services page.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_page', page='projects') }}" class="cms-hub-card">
+      <div class="chc-icon">📐</div>
+      <div class="chc-body">
+        <h3>Projects Page</h3>
+        <p>Page header, filter labels, and CTA section text.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_page', page='contact') }}" class="cms-hub-card">
+      <div class="chc-icon">📞</div>
+      <div class="chc-body">
+        <h3>Contact Page</h3>
+        <p>Address, phone numbers, emails, business hours, and map link.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_cms_page', page='apply') }}" class="cms-hub-card">
+      <div class="chc-icon">📝</div>
+      <div class="chc-body">
+        <h3>Apply / Quote Page</h3>
+        <p>Header text, feature highlights, and contact info panel.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+    <a href="{{ url_for('admin_service_images') }}" class="cms-hub-card">
+      <div class="chc-icon">🖼️</div>
+      <div class="chc-body">
+        <h3>Service Images</h3>
+        <p>Upload or replace images for each service card on the Services page.</p>
+      </div>
+      <span class="chc-arrow">→</span>
+    </a>
+
+  </div>
+</div>
+
+<style>
+.cms-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.cms-hub-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 20px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.cms-hub-card:hover {
+  border-color: var(--c-gold);
+  background: rgba(201,168,76,0.04);
+  transform: translateY(-2px);
+}
+.chc-icon { font-size: 1.8rem; flex-shrink: 0; }
+.chc-body { flex: 1; }
+.chc-body h3 { font-size: 0.95rem; color: var(--c-text); font-weight: 700; margin-bottom: 4px; }
+.chc-body p  { font-size: 0.8rem; color: var(--c-muted); line-height: 1.5; margin: 0; }
+.chc-arrow   { color: var(--c-gold); font-size: 1.1rem; flex-shrink: 0; }
+@media (max-width: 900px) { .cms-hub-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .cms-hub-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Applications – Well-Built Admin{% endblock %}
+{% block page_title %}Applications{% endblock %}
+
+{% block admin_content %}
+<div class="admin-section">
+  <div class="section-header-row">
+    <h2 class="admin-section-title">All Submissions</h2>
+    <div class="table-filters">
+      <input type="text" id="searchInput" placeholder="Search name, email..." class="admin-search">
+      <select id="statusFilter" class="admin-select">
+        <option value="">All Statuses</option>
+        <option value="new">New</option>
+        <option value="reviewed">Reviewed</option>
+        <option value="closed">Closed</option>
+      </select>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="admin-table" id="appsTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Service / Position</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for app in applications %}
+        <tr data-status="{{ app.status }}">
+          <td>{{ app.id }}</td>
+          <td><strong>{{ app.full_name }}</strong></td>
+          <td><span class="badge badge-{{ 'blue' if app.type == 'service' else 'purple' }}">{{ app.type|title }}</span></td>
+          <td>{{ app.position_service }}</td>
+          <td><a href="mailto:{{ app.email }}">{{ app.email }}</a></td>
+          <td>{{ app.phone }}</td>
+          <td>
+            <span class="badge badge-{{ 'green' if app.status == 'reviewed' else 'orange' if app.status == 'new' else 'gray' }}">
+              {{ app.status|title }}
+            </span>
+          </td>
+          <td>{{ app.created_at[:10] }}</td>
+          <td class="actions-cell">
+            <button class="action-btn info" onclick="openDetail({{ app.id }}, `{{ app.full_name }}`, `{{ app.email }}`, `{{ app.phone }}`, `{{ app.type }}`, `{{ app.position_service }}`, `{{ app.message or '' }}`, `{{ app.file_path or '' }}`, `{{ app.status }}`)">View</button>
+            <form method="POST" action="{{ url_for('update_app_status', app_id=app.id) }}" style="display:inline">
+              <select name="status" onchange="this.form.submit()" class="inline-select">
+                <option value="new" {{ 'selected' if app.status == 'new' }}>New</option>
+                <option value="reviewed" {{ 'selected' if app.status == 'reviewed' }}>Reviewed</option>
+                <option value="closed" {{ 'selected' if app.status == 'closed' }}>Closed</option>
+              </select>
+            </form>
+            <form method="POST" action="{{ url_for('delete_application', app_id=app.id) }}" style="display:inline" onsubmit="return confirm('Delete this application?')">
+              <button type="submit" class="action-btn danger">Del</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" class="empty-row">No applications yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalName">Application Detail</h3>
+      <button onclick="closeDetail()" class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid">
+        <div><label>Email</label><p id="modalEmail">-</p></div>
+        <div><label>Phone</label><p id="modalPhone">-</p></div>
+        <div><label>Type</label><p id="modalType">-</p></div>
+        <div><label>Service/Position</label><p id="modalService">-</p></div>
+      </div>
+      <div class="detail-message">
+        <label>Message</label>
+        <p id="modalMessage">-</p>
+      </div>
+      <div id="modalFile" class="detail-file" style="display:none">
+        <label>Attached File</label>
+        <a id="modalFileLink" href="#" target="_blank">View / Download File</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openDetail(id, name, email, phone, type, service, message, file, status) {
+  document.getElementById('modalName').textContent = name;
+  document.getElementById('modalEmail').textContent = email;
+  document.getElementById('modalPhone').textContent = phone;
+  document.getElementById('modalType').textContent = type;
+  document.getElementById('modalService').textContent = service;
+  document.getElementById('modalMessage').textContent = message || 'No message provided.';
+  const fileDiv = document.getElementById('modalFile');
+  if (file) {
+    document.getElementById('modalFileLink').href = '/' + file;
+    fileDiv.style.display = 'block';
+  } else fileDiv.style.display = 'none';
+  document.getElementById('detailModal').style.display = 'flex';
+}
+function closeDetail() { document.getElementById('detailModal').style.display = 'none'; }
+
+// Filter
+document.getElementById('searchInput').addEventListener('input', filterTable);
+document.getElementById('statusFilter').addEventListener('change', filterTable);
+function filterTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  document.querySelectorAll('#appsTable tbody tr').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const rowStatus = row.dataset.status || '';
+    row.style.display = (text.includes(search) && (!status || rowStatus === status)) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

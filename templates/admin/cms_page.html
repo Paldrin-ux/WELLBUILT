@@ -1,0 +1,451 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}CMS – {{ page|title }} – Well-Built Admin{% endblock %}
+{% block page_title %}CMS: {{ page|title }} Page{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── CMS PAGE EDITOR STYLES ─────────────────────────────────────── */
+.cms-page-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.cms-back {
+  font-size: 0.875rem;
+  color: var(--c-muted, #8892a4);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.cms-back:hover { color: var(--c-gold, #c9a84c); }
+
+.cms-save-top {
+  padding: 11px 28px;
+  background: var(--c-gold, #c9a84c);
+  color: var(--c-bg, #0f1117);
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+}
+.cms-save-top:hover { background: #e8c97a; transform: translateY(-1px); }
+
+/* ── SECTION ACCORDION ──────────────────────────────────────────── */
+.cms-section-block {
+  background: var(--c-surface, #181c27);
+  border: 1px solid var(--c-border, #252d40);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.cms-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.cms-section-head:hover { background: rgba(255,255,255,0.02); }
+.cms-section-head h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-gold, #c9a84c);
+  margin: 0;
+}
+.cms-section-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cms-section-count {
+  font-size: 0.7rem;
+  color: var(--c-muted, #8892a4);
+  background: var(--c-panel, #1e2435);
+  border-radius: 100px;
+  padding: 2px 10px;
+}
+.cms-section-chevron {
+  color: var(--c-muted, #8892a4);
+  font-size: 0.75rem;
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+.cms-section-block.open .cms-section-chevron { transform: rotate(180deg); }
+
+.cms-section-body {
+  display: none;
+  padding: 8px 22px 22px;
+  border-top: 1px solid var(--c-border, #252d40);
+}
+.cms-section-block.open .cms-section-body { display: block; }
+
+/* ── FIELDS ─────────────────────────────────────────────────────── */
+.cms-fields-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+.cms-field { display: flex; flex-direction: column; gap: 6px; }
+.cms-field.full  { grid-column: 1 / -1; }
+.cms-field label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-muted, #8892a4);
+}
+.cms-field-key {
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: var(--c-dim, #545e73);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.cms-field input[type="text"],
+.cms-field textarea {
+  width: 100%;
+  background: var(--c-panel, #1e2435);
+  border: 1px solid var(--c-border, #252d40);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--c-text, #e8ecf4);
+  font-size: 0.875rem;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  box-sizing: border-box;
+}
+.cms-field input:focus,
+.cms-field textarea:focus {
+  outline: none;
+  border-color: var(--c-gold, #c9a84c);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+}
+.cms-field input::placeholder,
+.cms-field textarea::placeholder { color: var(--c-dim, #545e73); }
+.cms-field small {
+  font-size: 0.68rem;
+  color: var(--c-dim, #545e73);
+  margin-top: 2px;
+}
+
+/* ── VISIBILITY TOGGLE ──────────────────────────────────────────── */
+.cms-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--c-panel, #1e2435);
+  border: 1px solid var(--c-border, #252d40);
+  border-radius: 8px;
+  width: 100%;
+}
+.cms-toggle {
+  position: relative;
+  width: 42px; height: 24px;
+  flex-shrink: 0;
+}
+.cms-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.cms-toggle-slider {
+  position: absolute; inset: 0;
+  background: var(--c-dim, #545e73);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cms-toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform 0.2s;
+}
+.cms-toggle input:checked + .cms-toggle-slider { background: var(--c-gold, #c9a84c); }
+.cms-toggle input:checked + .cms-toggle-slider::before { transform: translateX(18px); }
+.cms-toggle-label { font-size: 0.85rem; color: var(--c-text, #e8ecf4); }
+
+/* ── IMAGE UPLOAD FIELD ─────────────────────────────────────────── */
+.cms-image-field {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  background: var(--c-panel, #1e2435);
+  border: 1px solid var(--c-border, #252d40);
+  border-radius: 8px;
+}
+.cms-image-preview {
+  width: 96px; height: 64px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--c-surface, #181c27);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cms-image-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cms-image-preview .no-img { font-size: 1.6rem; opacity: 0.25; }
+.cms-image-actions { display: flex; flex-direction: column; gap: 8px; }
+.cms-img-file-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: var(--c-surface, #181c27);
+  border: 1px dashed var(--c-border, #252d40);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--c-muted, #8892a4);
+  cursor: pointer;
+  transition: all 0.2s;
+  width: fit-content;
+}
+.cms-img-file-label:hover { border-color: var(--c-gold, #c9a84c); color: var(--c-text, #e8ecf4); }
+.cms-img-file-label.has-file { border-color: rgba(201,168,76,0.5); color: var(--c-gold, #c9a84c); }
+.cms-img-file-input { display: none; }
+.cms-img-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--c-gold, #c9a84c);
+  color: var(--c-bg, #0f1117);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  width: fit-content;
+  transition: all 0.2s;
+}
+.cms-img-upload-btn:hover { background: #e8c97a; }
+.cms-current-path {
+  font-size: 0.65rem;
+  color: var(--c-dim, #545e73);
+  font-family: monospace;
+  word-break: break-all;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .cms-fields-wrap { grid-template-columns: 1fr; }
+  .cms-field.full { grid-column: 1; }
+  .cms-image-field { grid-template-columns: 80px 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<form method="POST" id="cmsForm">
+
+  <!-- Top bar: back link + save button -->
+  <div class="cms-page-intro">
+    <a href="{{ url_for('admin_cms') }}" class="cms-back">← Back to CMS Hub</a>
+    <button type="submit" class="cms-save-top">💾 Save All Changes</button>
+  </div>
+
+  <!-- One accordion block per section group -->
+  {% for section_key, fields in sections.items() %}
+  {% set section_label = section_key.replace('.', ' › ').replace('_', ' ').title() %}
+
+  <div class="cms-section-block open" id="blk-{{ section_key|replace('.', '-') }}">
+
+    <!-- Header row (click to collapse) -->
+    <div class="cms-section-head" onclick="toggleSection(this)">
+      <h3>{{ section_label }}</h3>
+      <div class="cms-section-meta">
+        <span class="cms-section-count">{{ fields|length }} field{{ 's' if fields|length != 1 }}</span>
+        <span class="cms-section-chevron">▾</span>
+      </div>
+    </div>
+
+    <!-- Collapsible body -->
+    <div class="cms-section-body">
+      <div class="cms-fields-wrap">
+        {% for field in fields %}
+
+        {# Determine if this field needs full width #}
+        {% set is_long = field.field in ['body','body1','body2','body3','subtitle','desc','tagline','list','hours','footer_body'] %}
+        {% set is_img  = field.field.endswith('_image') or field.field in ['bg_image','hero_image'] %}
+        {% set is_vis  = field.field == 'visible' %}
+
+        <div class="cms-field {% if is_long or is_img or is_vis %}full{% endif %}">
+
+          <label>
+            {{ field.field | replace('_', ' ') | title }}
+            <span class="cms-field-key">{{ field.key }}</span>
+          </label>
+
+          {# ── IMAGE UPLOAD ── #}
+          {% if is_img %}
+          <div class="cms-image-field">
+            <div class="cms-image-preview" id="prev-{{ loop.index }}">
+              {% if field.value %}
+                <img src="/{{ field.value }}" alt="Current image">
+              {% else %}
+                <span class="no-img">🖼️</span>
+              {% endif %}
+            </div>
+            <div class="cms-image-actions">
+              <input type="hidden" name="{{ field.key }}" value="{{ field.value }}" id="hidval-{{ loop.index }}">
+              <label class="cms-img-file-label" for="imgfile-{{ loop.index }}" id="filelabel-{{ loop.index }}">
+                📎 <span class="label-text">Choose image…</span>
+              </label>
+              <input type="file" id="imgfile-{{ loop.index }}" class="cms-img-file-input"
+                     accept=".jpg,.jpeg,.png,.gif,.webp"
+                     data-idx="{{ loop.index }}"
+                     onchange="handleImgPick(this)">
+              <button type="button" class="cms-img-upload-btn"
+                      onclick="uploadCmsImage('{{ field.key }}', {{ loop.index }})">
+                ↑ Upload Image
+              </button>
+              {% if field.value %}
+              <span class="cms-current-path">{{ field.value }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          {# ── VISIBILITY TOGGLE ── #}
+          {% elif is_vis %}
+          <div class="cms-toggle-row">
+            <label class="cms-toggle">
+              <input type="checkbox" name="{{ field.key }}" value="1"
+                     {% if field.value == '1' %}checked{% endif %}
+                     onchange="this.closest('.cms-toggle-row').querySelector('.cms-toggle-label').textContent = this.checked ? 'Section visible on homepage' : 'Section hidden from homepage'">
+              <span class="cms-toggle-slider"></span>
+            </label>
+            <span class="cms-toggle-label">
+              {{ 'Section visible on homepage' if field.value == '1' else 'Section hidden from homepage' }}
+            </span>
+          </div>
+
+          {# ── TEXTAREA for long content ── #}
+          {% elif is_long %}
+          <textarea name="{{ field.key }}"
+                    rows="{{ 4 if field.field == 'list' else 3 }}"
+                    placeholder="Enter {{ field.field | replace('_',' ') }}…">{{ field.value }}</textarea>
+          {% if field.field == 'list' %}
+          <small>Separate multiple items with a | pipe character  e.g.  Item One | Item Two | Item Three</small>
+          {% endif %}
+
+          {# ── DEFAULT: single-line text input ── #}
+          {% else %}
+          <input type="text" name="{{ field.key }}"
+                 value="{{ field.value }}"
+                 placeholder="Enter {{ field.field | replace('_',' ') }}…">
+          {% endif %}
+
+        </div>
+        {% endfor %}
+      </div>{# /cms-fields-wrap #}
+    </div>{# /cms-section-body #}
+
+  </div>{# /cms-section-block #}
+  {% endfor %}
+
+  <!-- Bottom save button -->
+  <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
+    <a href="{{ url_for('admin_cms') }}" class="cms-back" style="font-size:0.875rem">← Back to CMS Hub</a>
+    <button type="submit" class="cms-save-top">💾 Save All Changes</button>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ── ACCORDION ── */
+function toggleSection(headEl) {
+  headEl.closest('.cms-section-block').classList.toggle('open');
+}
+
+/* Collapse all / expand all helpers */
+function expandAll()  { document.querySelectorAll('.cms-section-block').forEach(b => b.classList.add('open')); }
+function collapseAll(){ document.querySelectorAll('.cms-section-block').forEach(b => b.classList.remove('open')); }
+
+/* ── IMAGE PICK PREVIEW ── */
+const pendingFiles = {};
+
+function handleImgPick(input) {
+  const idx  = input.dataset.idx;
+  const file = input.files[0];
+  if (!file) return;
+  pendingFiles[idx] = file;
+
+  // Update label text
+  const labelEl = document.getElementById('filelabel-' + idx);
+  if (labelEl) {
+    labelEl.classList.add('has-file');
+    const span = labelEl.querySelector('.label-text');
+    if (span) span.textContent = file.name.length > 26 ? file.name.slice(0,23)+'…' : file.name;
+  }
+
+  // Live preview
+  const reader = new FileReader();
+  reader.onload = e => {
+    const prev = document.getElementById('prev-' + idx);
+    if (prev) prev.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width:100%;height:100%;object-fit:cover">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadCmsImage(cmsKey, idx) {
+  const file = pendingFiles[idx];
+  if (!file) { alert('Please choose an image file first.'); return; }
+
+  const fd = new FormData();
+  fd.append('cms_key', cmsKey);
+  fd.append('image', file);
+
+  fetch('/admin/cms/image-upload', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.path) {
+        const hid = document.getElementById('hidval-' + idx);
+        if (hid) hid.value = data.path;
+        alert('✅ Image uploaded successfully!\n\nClick "Save All Changes" to apply it to the page.');
+      } else {
+        alert('Upload failed: ' + (data.error || 'Unknown error'));
+      }
+    })
+    .catch(() => alert('Upload failed. Please try again.'));
+}
+
+/* ── FIX: visibility checkboxes must send 0 when unchecked ── */
+document.getElementById('cmsForm').addEventListener('submit', function() {
+  this.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    if (!cb.checked) {
+      const h = document.createElement('input');
+      h.type = 'hidden';
+      h.name = cb.name;
+      h.value = '0';
+      this.appendChild(h);
+    }
+  });
+});
+</script>
+{% endblock %}

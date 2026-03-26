@@ -1,0 +1,353 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Service Images – Well-Built Admin{% endblock %}
+{% block page_title %}Service Images{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Service Images Admin ────────────────── */
+.si-intro {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.si-intro-icon { font-size: 2rem; flex-shrink: 0; }
+.si-intro p { font-size: 0.875rem; color: var(--c-muted); line-height: 1.6; margin: 0; }
+.si-intro strong { color: var(--c-text); }
+
+.si-section-block { margin-bottom: 40px; }
+.si-section-label {
+  font-family: var(--f-display);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  padding: 8px 16px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.si-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.si-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+  scroll-margin-top: 80px;
+}
+.si-card:hover { border-color: rgba(201,168,76,0.4); }
+.si-card.has-image { border-color: rgba(34,197,94,0.25); }
+
+.si-card-preview {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: var(--c-panel);
+  position: relative;
+  overflow: hidden;
+}
+.si-card-preview img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.si-card-empty {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--c-dim);
+}
+.si-card-empty-icon { font-size: 2rem; opacity: 0.4; }
+.si-card-empty span { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.si-card-status {
+  position: absolute;
+  top: 8px; right: 8px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.si-card-status.uploaded {
+  background: rgba(34,197,94,0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34,197,94,0.3);
+}
+.si-card-status.missing {
+  background: rgba(245,158,11,0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245,158,11,0.2);
+}
+
+.si-card-body { padding: 16px 18px 18px; }
+.si-card-body h4 {
+  font-family: var(--f-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.si-card-key {
+  font-size: 0.68rem;
+  color: var(--c-dim);
+  font-family: monospace;
+  margin-bottom: 14px;
+  display: block;
+}
+
+/* Upload form inside card */
+.si-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.si-file-input-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.si-file-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: var(--c-panel);
+  border: 1px dashed var(--c-border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+.si-file-label:hover { border-color: var(--c-gold); color: var(--c-text); }
+.si-file-label.has-file { border-color: rgba(201,168,76,0.5); color: var(--c-gold); background: rgba(201,168,76,0.06); }
+.si-file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+
+.si-btn-row { display: flex; gap: 8px; }
+.si-btn-upload {
+  flex: 1;
+  padding: 9px 14px;
+  background: var(--c-gold);
+  color: var(--c-bg);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.si-btn-upload:hover { background: #e8c97a; }
+.si-btn-delete {
+  padding: 9px 12px;
+  background: rgba(239,68,68,0.1);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.si-btn-delete:hover { background: rgba(239,68,68,0.2); }
+
+/* Progress summary bar */
+.si-summary {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 24px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+.si-summary-stat { display: flex; flex-direction: column; gap: 2px; }
+.si-summary-num { font-family: var(--f-display); font-size: 1.6rem; font-weight: 800; color: var(--c-text); line-height: 1; }
+.si-summary-num.green { color: #4ade80; }
+.si-summary-num.orange { color: #fbbf24; }
+.si-summary-label { font-size: 0.72rem; color: var(--c-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.si-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--c-panel);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.si-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80, var(--c-gold));
+  border-radius: 100px;
+  transition: width 0.6s ease;
+}
+
+@media (max-width: 1024px) { .si-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .si-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+{% set total_slots = namespace(count=0) %}
+{% set uploaded = namespace(count=0) %}
+{% for section_name, slots in sections.items() %}
+  {% for slot in slots %}
+    {% set total_slots.count = total_slots.count + 1 %}
+    {% if slot.image_path %}{% set uploaded.count = uploaded.count + 1 %}{% endif %}
+  {% endfor %}
+{% endfor %}
+{% set pct = ((uploaded.count / total_slots.count) * 100) | int if total_slots.count > 0 else 0 %}
+
+<!-- Intro -->
+<div class="si-intro">
+  <div class="si-intro-icon">🖼️</div>
+  <p>
+    <strong>Upload images for each service card on the public Services page.</strong><br>
+    Each slot corresponds to a specific service card. Click "Choose Image", select your photo, then click "Upload" — just like editing a project image.
+  </p>
+</div>
+
+<!-- Progress Summary -->
+<div class="si-summary">
+  <div class="si-summary-stat">
+    <span class="si-summary-num green">{{ uploaded.count }}</span>
+    <span class="si-summary-label">Uploaded</span>
+  </div>
+  <div class="si-summary-stat">
+    <span class="si-summary-num orange">{{ total_slots.count - uploaded.count }}</span>
+    <span class="si-summary-label">Missing</span>
+  </div>
+  <div class="si-summary-stat">
+    <span class="si-summary-num">{{ total_slots.count }}</span>
+    <span class="si-summary-label">Total Slots</span>
+  </div>
+  <div class="si-progress-bar">
+    <div class="si-progress-fill" style="width: {{ pct }}%;"></div>
+  </div>
+  <span style="font-size: 0.8rem; color: var(--c-muted); white-space: nowrap; font-weight: 600;">{{ pct }}% complete</span>
+</div>
+
+<!-- Section-by-section grids -->
+{% for section_name, slots in sections.items() %}
+<div class="si-section-block">
+  <div class="si-section-label">{{ section_name }}</div>
+  <div class="si-grid">
+    {% for slot in slots %}
+    <div class="si-card {% if slot.image_path %}has-image{% endif %}" id="{{ slot.key }}">
+      
+      <!-- Preview -->
+      <div class="si-card-preview">
+        {% if slot.image_path %}
+          <img src="/{{ slot.image_path }}" alt="{{ slot.label }}">
+          <span class="si-card-status uploaded">✓ Uploaded</span>
+        {% else %}
+          <div class="si-card-empty">
+            <span class="si-card-empty-icon">📷</span>
+            <span>No image yet</span>
+          </div>
+          <span class="si-card-status missing">Missing</span>
+        {% endif %}
+      </div>
+
+      <!-- Body -->
+      <div class="si-card-body">
+        <h4>{{ slot.label }}</h4>
+        <span class="si-card-key">key: {{ slot.key }}</span>
+
+        <!-- Upload form -->
+        <form method="POST"
+              action="{{ url_for('admin_upload_service_image', slot_key=slot.key) }}"
+              enctype="multipart/form-data"
+              class="si-upload-form"
+              data-slot="{{ slot.key }}">
+          <div class="si-file-input-wrap">
+            <label class="si-file-label" id="label-{{ slot.key }}">
+              <span>📎</span>
+              <span class="si-file-text">Choose image…</span>
+            </label>
+            <input type="file"
+                   name="image"
+                   accept=".jpg,.jpeg,.png,.gif"
+                   class="si-file-input"
+                   data-label="label-{{ slot.key }}"
+                   data-text="si-file-text">
+          </div>
+          <div class="si-btn-row">
+            <button type="submit" class="si-btn-upload">
+              {{ 'Replace Image' if slot.image_path else 'Upload Image' }}
+            </button>
+            {% if slot.image_path %}
+            <button type="submit" class="si-btn-delete"
+                    formaction="{{ url_for('admin_delete_service_image', slot_key=slot.key) }}"
+                    formmethod="post"
+                    onclick="return confirm('Remove this image?')">
+              Remove
+            </button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Show selected filename in the label
+document.querySelectorAll('.si-file-input').forEach(input => {
+  input.addEventListener('change', () => {
+    const labelEl = document.getElementById(input.dataset.label);
+    if (!labelEl) return;
+    const textEl = labelEl.querySelector('.si-file-text');
+    if (input.files.length) {
+      const name = input.files[0].name;
+      textEl.textContent = name.length > 28 ? name.slice(0, 25) + '…' : name;
+      labelEl.classList.add('has-file');
+    } else {
+      textEl.textContent = 'Choose image…';
+      labelEl.classList.remove('has-file');
+    }
+  });
+});
+
+// Prevent empty file upload submission
+document.querySelectorAll('form.si-upload-form').forEach(form => {
+  form.addEventListener('submit', event => {
+    const fileInput = form.querySelector('input[type="file"]');
+    if (!fileInput || !fileInput.files.length) {
+      event.preventDefault();
+      alert('Please choose an image before uploading.');
+    }
+  });
+});
+</script>
+{% endblock %}

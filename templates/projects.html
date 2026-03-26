@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Our Projects – Well-Built Specialty Contractors{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div class="container">
+    <span class="section-eyebrow">Our Portfolio</span>
+    <h1>Projects & Work</h1>
+    <p>Structural repair, retrofitting, and concrete restoration projects delivered across the Philippines.</p>
+  </div>
+</div>
+
+<section class="section projects-page-section">
+  <div class="container">
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <a href="{{ url_for('projects', category='all') }}"
+         class="filter-btn {% if active_category == 'all' %}active{% endif %}">All Projects</a>
+      <a href="{{ url_for('projects', category='Structural Assessment') }}"
+         class="filter-btn {% if active_category == 'Structural Assessment' %}active{% endif %}">Structural Assessment</a>
+      <a href="{{ url_for('projects', category='Retrofitting') }}"
+         class="filter-btn {% if active_category == 'Retrofitting' %}active{% endif %}">Retrofitting</a>
+      <a href="{{ url_for('projects', category='Concrete Repair') }}"
+         class="filter-btn {% if active_category == 'Concrete Repair' %}active{% endif %}">Concrete Repair</a>
+      <a href="{{ url_for('projects', category='Value Engineering') }}"
+         class="filter-btn {% if active_category == 'Value Engineering' %}active{% endif %}">Value Engineering</a>
+      <a href="{{ url_for('projects', category='Structural Strengthening') }}"
+         class="filter-btn {% if active_category == 'Structural Strengthening' %}active{% endif %}">Structural Strengthening</a>
+    </div>
+
+    <!-- Projects Grid -->
+    {% if projects %}
+    <div class="projects-grid-full">
+      {% for project in projects %}
+      <div class="project-card reveal">
+        <div class="project-img">
+          {% if project.image_path %}
+            <img src="/{{ project.image_path }}" alt="{{ project.title }}" loading="lazy">
+          {% else %}
+            <div class="project-placeholder">
+              <span>{{ project.category[0] }}</span>
+            </div>
+          {% endif %}
+          <div class="project-overlay">
+            <span class="project-category-tag">{{ project.category }}</span>
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>{{ project.title }}</h3>
+          {% if project.description %}
+            <p class="project-desc">{{ project.description }}</p>
+          {% endif %}
+          <div class="project-meta">
+            <span>{{ project.client or '–' }}</span>
+            <span>{{ project.year or '–' }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-projects">
+      <p>No projects found in this category.</p>
+      <a href="{{ url_for('projects') }}" class="btn btn-outline-dark">View All</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="container cta-content">
+    <h2>Have a project in mind?</h2>
+    <p>Our team is ready to assess your structure and deliver the right solution.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('apply') }}" class="btn btn-primary btn-lg">Request a Quote</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-ghost btn-lg">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.projects-page-section { background: var(--c-bg); }
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 48px;
+  padding: 20px;
+  background: var(--c-bg2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+.filter-btn {
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--c-text-muted);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.filter-btn:hover { color: var(--c-text); border-color: var(--c-text-muted); }
+.filter-btn.active {
+  background: var(--c-gold);
+  color: var(--c-bg);
+  border-color: var(--c-gold);
+}
+
+.projects-grid-full {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.project-card .project-desc {
+  font-size: 0.82rem;
+  color: var(--c-text-muted);
+  margin: 8px 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty-projects {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--c-text-muted);
+}
+.empty-projects p { margin-bottom: 24px; font-size: 1.1rem; }
+
+@media (max-width: 1024px) { .projects-grid-full { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px)  { .projects-grid-full { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}

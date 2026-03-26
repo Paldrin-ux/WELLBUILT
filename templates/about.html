@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}About Us – {{ cms.get('global.navbar.logo_text','Well-Built') }} Specialty Contractors{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="section-eyebrow">{{ cms.get('about.header.eyebrow','Our Story') }}</span>
+    <h1>{{ cms.get('about.header.title','About Well-Built') }}</h1>
+    <p>{{ cms.get('about.header.subtitle','') }}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="about-story-grid">
+      <div class="about-story-text reveal">
+        <h2>{{ cms.get('about.story.title','Who We Are') }}</h2>
+        <p>{{ cms.get('about.story.body1','') }}</p>
+        <p>{{ cms.get('about.story.body2','') }}</p>
+        <p>{{ cms.get('about.story.body3','') }}</p>
+      </div>
+      <div class="about-stats-panel reveal">
+        <div class="panel-stat"><span class="ps-num">{{ cms.get('about.stats.years','15+') }}</span><span class="ps-label">{{ cms.get('about.stats.years_label','Years in Business') }}</span></div>
+        <div class="panel-stat"><span class="ps-num">{{ cms.get('about.stats.projects','700+') }}</span><span class="ps-label">{{ cms.get('about.stats.projects_label','Projects Delivered') }}</span></div>
+        <div class="panel-stat"><span class="ps-num">{{ cms.get('about.stats.engineers','50+') }}</span><span class="ps-label">{{ cms.get('about.stats.engineers_label','Expert Engineers') }}</span></div>
+        <div class="panel-stat"><span class="ps-num">{{ cms.get('about.stats.clients','200+') }}</span><span class="ps-label">{{ cms.get('about.stats.clients_label','Satisfied Clients') }}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--c-bg2); padding: 80px 0;">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">{{ cms.get('about.timeline.eyebrow','Our Journey') }}</span>
+      <h2 class="section-title">{{ cms.get('about.timeline.title','Company Milestones') }}</h2>
+    </div>
+    <div class="timeline">
+      {% for item in timeline %}
+      <div class="tl-item reveal">
+        <div class="tl-year">{{ item.year }}</div>
+        <div class="tl-content">
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.body }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.about-story-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.about-story-text h2{font-size:2.2rem;color:var(--c-text);margin-bottom:20px}
+.about-story-text p{color:var(--c-text-muted);font-size:0.95rem;line-height:1.8;margin-bottom:16px}
+.about-story-text strong{color:var(--c-text)}
+.about-stats-panel{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--c-border);border-radius:var(--radius);overflow:hidden}
+.panel-stat{background:var(--c-bg2);padding:36px 24px}
+.ps-num{display:block;font-family:var(--f-display);font-size:2.8rem;font-weight:800;color:var(--c-gold);line-height:1;margin-bottom:6px}
+.ps-label{font-size:0.8rem;color:var(--c-text-muted);letter-spacing:0.08em;text-transform:uppercase}
+.timeline{position:relative;padding-left:120px}
+.timeline::before{content:'';position:absolute;left:80px;top:0;bottom:0;width:1px;background:var(--c-border)}
+.tl-item{display:flex;gap:40px;margin-bottom:48px;align-items:flex-start;position:relative}
+.tl-item::before{content:'';position:absolute;left:-44px;top:6px;width:10px;height:10px;background:var(--c-gold);border-radius:50%;box-shadow:0 0 0 4px rgba(201,168,76,0.2)}
+.tl-year{font-family:var(--f-display);font-size:1rem;font-weight:800;color:var(--c-gold);letter-spacing:0.05em;min-width:60px;padding-top:2px}
+.tl-content h4{font-size:1.1rem;color:var(--c-text);margin-bottom:6px}
+.tl-content p{font-size:0.875rem;color:var(--c-text-muted);line-height:1.65}
+@media(max-width:768px){.about-story-grid{grid-template-columns:1fr;gap:48px}.timeline{padding-left:80px}}
+</style>
+{% endblock %}

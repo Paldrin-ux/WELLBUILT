@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Contact Us – {{ cms.get('global.navbar.logo_text','Well-Built') }} Specialty Contractors{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="section-eyebrow">{{ cms.get('contact.header.eyebrow','Get In Touch') }}</span>
+    <h1>{{ cms.get('contact.header.title','Contact Our Team') }}</h1>
+    <p>{{ cms.get('contact.header.subtitle','') }}</p>
+  </div>
+</div>
+
+<section class="section contact-section">
+  <div class="container contact-container">
+    <div class="contact-info-col">
+      <div class="contact-card reveal">
+        <div class="contact-card-icon">📍</div>
+        <div>
+          <h4>Office Address</h4>
+          <p>{{ cms.get('contact.info.address','') }}<br><small>Serving all regions nationwide</small></p>
+        </div>
+      </div>
+      <div class="contact-card reveal">
+        <div class="contact-card-icon">📞</div>
+        <div>
+          <h4>Phone</h4>
+          <p>
+            <a href="tel:{{ cms.get('contact.info.phone1','') }}">{{ cms.get('contact.info.phone1','') }}</a><br>
+            <a href="tel:{{ cms.get('contact.info.phone2','') }}">{{ cms.get('contact.info.phone2','') }}</a><br>
+            <small>Mon–Fri, 8:00AM – 5:00PM</small>
+          </p>
+        </div>
+      </div>
+      <div class="contact-card reveal">
+        <div class="contact-card-icon">✉️</div>
+        <div>
+          <h4>Email</h4>
+          <p>
+            <a href="mailto:{{ cms.get('contact.info.email1','') }}">{{ cms.get('contact.info.email1','') }}</a><br>
+            <a href="mailto:{{ cms.get('contact.info.email2','') }}">{{ cms.get('contact.info.email2','') }}</a>
+          </p>
+        </div>
+      </div>
+      <div class="contact-card reveal">
+        <div class="contact-card-icon">🕐</div>
+        <div>
+          <h4>Business Hours</h4>
+          <p>{{ cms.get('contact.info.hours','Monday – Friday: 8:00 AM – 5:00 PM')|replace('\n','<br>')|safe }}</p>
+        </div>
+      </div>
+      <div class="contact-cta-box reveal">
+        <h4>{{ cms.get('contact.cta.title','Ready to start a project?') }}</h4>
+        <p>{{ cms.get('contact.cta.body','') }}</p>
+        <a href="{{ url_for('apply') }}" class="btn btn-primary">{{ cms.get('contact.cta.btn','Submit an Inquiry →') }}</a>
+      </div>
+    </div>
+
+    <div class="contact-main-col">
+      <div class="map-container reveal">
+        <div class="map-placeholder">
+          <div class="map-inner">
+            <span class="map-pin">📍</span>
+            <p>{{ cms.get('contact.info.address','') }}</p>
+            <small>Exact address provided upon confirmed appointment</small>
+            <a href="{{ cms.get('contact.map.url','#') }}" target="_blank" rel="noopener" class="btn btn-outline-dark" style="margin-top:16px">Open in Google Maps</a>
+          </div>
+        </div>
+      </div>
+      <div class="quick-message-form reveal">
+        <h3>Send a Quick Message</h3>
+        <p class="form-note">For detailed project inquiries, please use our <a href="{{ url_for('apply') }}">full inquiry form</a>.</p>
+        <div class="quick-form">
+          <div class="qf-row">
+            <input type="text" placeholder="Your Name">
+            <input type="email" placeholder="Email Address">
+          </div>
+          <input type="text" placeholder="Subject">
+          <textarea rows="4" placeholder="Your message…"></textarea>
+          <a href="{{ url_for('apply') }}" class="btn btn-primary btn-full">Go to Full Inquiry Form →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="credentials-strip">
+  <div class="container credentials-inner">
+    <div class="cred-item"><span class="cred-icon">🏆</span><div><strong>ICRI Member</strong><small>International Concrete Repair Institute</small></div></div>
+    <div class="cred-divider"></div>
+    <div class="cred-item"><span class="cred-icon">📋</span><div><strong>PCAB Licensed</strong><small>Philippine Contractors Accreditation Board</small></div></div>
+    <div class="cred-divider"></div>
+    <div class="cred-item"><span class="cred-icon">⚙️</span><div><strong>ACI Certified</strong><small>American Concrete Institute</small></div></div>
+    <div class="cred-divider"></div>
+    <div class="cred-item"><span class="cred-icon">✅</span><div><strong>ISO Standards</strong><small>Quality Management Systems</small></div></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.contact-section{background:var(--c-bg)}
+.contact-container{display:grid;grid-template-columns:1fr 1.6fr;gap:48px;align-items:start}
+.contact-info-col{display:flex;flex-direction:column;gap:16px}
+.contact-card{display:flex;align-items:flex-start;gap:16px;background:var(--c-bg2);border:1px solid var(--c-border);border-radius:var(--radius);padding:24px 22px;transition:var(--transition)}
+.contact-card:hover{border-color:var(--c-gold)}
+.contact-card-icon{font-size:1.4rem;flex-shrink:0;line-height:1}
+.contact-card h4{font-family:var(--f-display);font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-gold);margin-bottom:6px}
+.contact-card p{font-size:0.875rem;color:var(--c-text-muted);line-height:1.65}
+.contact-card a{color:var(--c-text);transition:color 0.2s}
+.contact-card a:hover{color:var(--c-gold)}
+.contact-card small{color:var(--c-text-dim);font-size:0.78rem}
+.contact-cta-box{background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.04));border:1px solid rgba(201,168,76,0.3);border-radius:var(--radius);padding:28px 24px}
+.contact-cta-box h4{font-size:1rem;color:var(--c-text);margin-bottom:8px}
+.contact-cta-box p{font-size:0.85rem;color:var(--c-text-muted);margin-bottom:16px;line-height:1.6}
+.contact-main-col{display:flex;flex-direction:column;gap:24px}
+.map-container{border-radius:var(--radius);overflow:hidden}
+.map-placeholder{background:var(--c-bg3);border:1px solid var(--c-border);border-radius:var(--radius);min-height:280px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.map-placeholder::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:40px 40px}
+.map-inner{text-align:center;z-index:1;position:relative;padding:32px}
+.map-pin{font-size:3rem;display:block;margin-bottom:12px}
+.map-inner p{font-size:1rem;font-weight:600;color:var(--c-text);margin-bottom:6px}
+.map-inner small{color:var(--c-text-muted);font-size:0.82rem}
+.quick-message-form{background:var(--c-bg2);border:1px solid var(--c-border);border-radius:var(--radius);padding:32px}
+.quick-message-form h3{font-size:1.3rem;color:var(--c-text);margin-bottom:6px}
+.form-note{font-size:0.85rem;color:var(--c-text-muted);margin-bottom:24px}
+.form-note a{color:var(--c-gold);text-decoration:underline}
+.quick-form{display:flex;flex-direction:column;gap:14px}
+.qf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quick-form input,.quick-form textarea{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-sm);padding:12px 16px;color:var(--c-text);font-size:0.9rem;width:100%;transition:var(--transition);font-family:inherit}
+.quick-form input:focus,.quick-form textarea:focus{outline:none;border-color:var(--c-gold);box-shadow:0 0 0 3px rgba(201,168,76,0.1)}
+.quick-form input::placeholder,.quick-form textarea::placeholder{color:var(--c-text-dim)}
+.credentials-strip{background:var(--c-bg2);border-top:1px solid var(--c-border);padding:40px 0}
+.credentials-inner{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.cred-item{display:flex;align-items:center;gap:12px}
+.cred-icon{font-size:1.5rem}
+.cred-item strong{display:block;font-size:0.9rem;color:var(--c-text);font-weight:600}
+.cred-item small{font-size:0.75rem;color:var(--c-text-muted)}
+.cred-divider{width:1px;height:40px;background:var(--c-border)}
+@media(max-width:900px){.contact-container{grid-template-columns:1fr}.qf-row{grid-template-columns:1fr}.cred-divider{display:none}}
+</style>
+{% endblock %}

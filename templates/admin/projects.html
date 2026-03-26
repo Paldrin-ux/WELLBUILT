@@ -1,0 +1,50 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Projects – Well-Built Admin{% endblock %}
+{% block page_title %}Projects{% endblock %}
+
+{% block admin_content %}
+<div class="admin-section">
+  <div class="section-header-row">
+    <h2 class="admin-section-title">All Projects</h2>
+    <a href="{{ url_for('admin_add_project') }}" class="btn-admin-primary">+ Add Project</a>
+  </div>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Client</th>
+          <th>Year</th>
+          <th>Featured</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in projects %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td><strong>{{ p.title }}</strong></td>
+          <td><span class="badge badge-blue">{{ p.category }}</span></td>
+          <td>{{ p.client or '-' }}</td>
+          <td>{{ p.year or '-' }}</td>
+          <td>
+            {% if p.featured %}<span class="badge badge-green">★ Featured</span>
+            {% else %}<span class="badge badge-gray">–</span>{% endif %}
+          </td>
+          <td class="actions-cell">
+            <a href="{{ url_for('admin_edit_project', proj_id=p.id) }}" class="action-btn info">Edit</a>
+            <form method="POST" action="{{ url_for('admin_delete_project', proj_id=p.id) }}" style="display:inline" onsubmit="return confirm('Delete this project?')">
+              <button type="submit" class="action-btn danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty-row">No projects yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

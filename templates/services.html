@@ -1,0 +1,1311 @@
+{% extends "base.html" %}
+{% block title %}Our Services – Well-Built Specialty Contractors{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ═══════════════════════════════════════════════════════
+   SERVICES PAGE — PREMIUM REDESIGN V3
+   Aesthetic: Industrial Precision — tactical dark, gold 
+   engineering accents, bold condensed type, 3D depth.
+═══════════════════════════════════════════════════════ */
+
+/* ── SERVICES PAGE VARS ─── */
+:root {
+  --sv-gutter: 28px;
+  --sv-radius: 16px;
+  --sv-pill: 100px;
+  --sv-gold: #c9a84c;
+  --sv-gold2: #e8c97a;
+  --sv-bg1: #0a0d12;
+  --sv-bg2: #0f1420;
+  --sv-bg3: #151c2e;
+  --sv-card: #181f32;
+  --sv-border: rgba(255,255,255,0.07);
+  --sv-text: #e8ecf4;
+  --sv-muted: #8892a4;
+  --sv-dim: #3a4460;
+  --ease-out: cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ── HERO BAND ──────────────────────────── */
+.sv-hero {
+  position: relative;
+  background: var(--sv-bg1);
+  padding: calc(var(--nav-h) + 72px) 0 80px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sv-border);
+}
+.sv-hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--sv-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sv-border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+}
+.sv-hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  pointer-events: none;
+}
+.sv-hero-content { position: relative; z-index: 2; }
+.sv-breadcrumb {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--sv-muted); margin-bottom: 24px;
+}
+.sv-breadcrumb .bc-sep { color: var(--sv-gold); opacity: 0.5; }
+.sv-breadcrumb .bc-active { color: var(--sv-gold); }
+.sv-hero h1 {
+  font-family: var(--f-display);
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--sv-text);
+  margin-bottom: 24px;
+}
+.sv-hero h1 em {
+  font-style: normal;
+  color: var(--sv-gold);
+  display: block;
+}
+.sv-hero-desc {
+  max-width: 580px;
+  font-size: 1.05rem;
+  color: var(--sv-muted);
+  line-height: 1.75;
+  margin-bottom: 40px;
+}
+.sv-creds {
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.sv-cred {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--sv-border);
+  border-radius: var(--sv-pill);
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sv-muted);
+}
+.sv-cred .cred-dot { width: 6px; height: 6px; background: var(--sv-gold); border-radius: 50%; }
+
+/* ── STICKY NAV ─────────────────────────── */
+.sv-sticky-nav {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 100;
+  background: rgba(10,13,18,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--sv-border);
+  padding: 0;
+}
+.sv-sticky-inner {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 0;
+}
+.sv-sticky-inner::-webkit-scrollbar { display: none; }
+.sv-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 18px 28px;
+  font-family: var(--f-display);
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-muted);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.sv-nav-item:hover { color: var(--sv-text); }
+.sv-nav-item.active { color: var(--sv-gold); border-bottom-color: var(--sv-gold); }
+.sv-nav-num {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  background: var(--sv-dim);
+  border-radius: 4px;
+  font-size: 0.68rem; font-weight: 800;
+  color: var(--sv-muted);
+  transition: all 0.25s ease;
+}
+.sv-nav-item.active .sv-nav-num,
+.sv-nav-item:hover .sv-nav-num {
+  background: var(--sv-gold);
+  color: var(--sv-bg1);
+}
+
+/* ── SERVICE SECTIONS ───────────────────── */
+.sv-section {
+  padding: 100px 0;
+  border-bottom: 1px solid var(--sv-border);
+  scroll-margin-top: calc(var(--nav-h) + 60px);
+}
+.sv-section:nth-child(odd) { background: var(--sv-bg1); }
+.sv-section:nth-child(even) { background: var(--sv-bg2); }
+
+.sv-section-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 48px; margin-bottom: 64px;
+}
+.sv-section-title-block {}
+.sv-section-index {
+  font-family: var(--f-display);
+  font-size: 0.72rem; font-weight: 800;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--sv-gold);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.sv-section-index::after {
+  content: '';
+  flex: 1; max-width: 40px; height: 1px;
+  background: var(--sv-gold); opacity: 0.4;
+}
+.sv-section-header h2 {
+  font-family: var(--f-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--sv-text);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+}
+.sv-section-header h2 span { color: var(--sv-gold); }
+.sv-section-desc {
+  max-width: 420px;
+  font-size: 0.92rem;
+  color: var(--sv-muted);
+  line-height: 1.75;
+  flex-shrink: 0;
+  padding-top: 8px;
+}
+.sv-section-cta-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: var(--sv-pill);
+  font-family: var(--f-display);
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sv-gold);
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  margin-top: 16px;
+  text-decoration: none;
+  align-self: flex-start;
+}
+.sv-section-cta-link:hover {
+  background: rgba(201,168,76,0.2);
+  transform: translateX(4px);
+}
+
+/* ── CARDS GRID ─────────────────────────── */
+.sv-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--sv-border);
+  border-radius: var(--sv-radius);
+  overflow: hidden;
+}
+.sv-cards.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.sv-cards.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+.sv-card {
+  background: var(--sv-card);
+  padding: 36px 32px;
+  position: relative;
+  transition: background 0.3s ease;
+  display: flex; flex-direction: column;
+  gap: 0;
+}
+.sv-card:hover { background: #1f2840; }
+.sv-card-type {
+  font-size: 0.62rem; font-weight: 800;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sv-gold);
+  padding: 4px 10px;
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: var(--sv-pill);
+  display: inline-block;
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+.sv-card-type.destructive { color: #f87171; border-color: rgba(248,113,113,0.25); }
+.sv-card-type.semi { color: #fb923c; border-color: rgba(251,146,60,0.25); }
+.sv-card-type.non-destructive { color: #4ade80; border-color: rgba(74,222,128,0.25); }
+
+.sv-card-img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: var(--sv-bg3);
+  position: relative;
+  flex-shrink: 0;
+}
+.sv-card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+  filter: brightness(0.9) saturate(1.1);
+}
+.sv-card:hover .sv-card-img img { transform: scale(1.06); }
+.sv-card-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--sv-bg3), #1a2035);
+  font-family: var(--f-display);
+  font-size: 3rem; font-weight: 800;
+  color: var(--sv-dim);
+  letter-spacing: 0.05em;
+}
+
+.sv-card h3 {
+  font-family: var(--f-display);
+  font-size: 1.15rem; font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sv-text);
+  margin-bottom: 12px;
+  line-height: 1.15;
+}
+.sv-card p {
+  font-size: 0.865rem;
+  color: var(--sv-muted);
+  line-height: 1.72;
+  flex: 1;
+}
+.sv-card-bullet-list {
+  margin-top: 16px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.sv-card-bullet-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.82rem; color: var(--sv-muted); line-height: 1.5;
+}
+.sv-card-bullet-list li::before {
+  content: '→';
+  color: var(--sv-gold); font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.sv-card-divider {
+  width: 32px; height: 2px;
+  background: linear-gradient(90deg, var(--sv-gold), transparent);
+  margin: 20px 0;
+}
+
+/* ── WIDE CARD (spans 2) ─ */
+.sv-card.wide { grid-column: span 2; }
+.sv-card.wide .sv-card-img { aspect-ratio: 21/9; }
+
+/* ── HERO CARD (big image top section) ─── */
+.sv-hero-card {
+  background: var(--sv-card);
+  border-radius: var(--sv-radius);
+  overflow: hidden;
+  margin-bottom: 2px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  min-height: 320px;
+}
+.sv-hero-card-img {
+  position: relative; overflow: hidden;
+  background: var(--sv-bg3);
+}
+.sv-hero-card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+.sv-hero-card:hover .sv-hero-card-img img { transform: scale(1.04); }
+.sv-hero-card-body {
+  padding: 48px 40px;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 16px;
+}
+.sv-hero-card-body h3 {
+  font-family: var(--f-display);
+  font-size: 1.8rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--sv-text); line-height: 1.05;
+}
+.sv-hero-card-body p {
+  font-size: 0.9rem; color: var(--sv-muted); line-height: 1.75;
+}
+
+/* ── PHOTO GALLERY STRIP ─────────────────── */
+.sv-photo-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  border-radius: var(--sv-radius);
+  overflow: hidden;
+  margin-bottom: var(--sv-gutter);
+  background: var(--sv-border);
+}
+.sv-photo-strip-item {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--sv-bg3);
+}
+.sv-photo-strip-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85) saturate(1.15);
+  transition: all 0.5s var(--ease-out);
+}
+.sv-photo-strip-item:hover img { filter: brightness(1.05) saturate(1.25); transform: scale(1.08); }
+
+/* ── VALUE ENGINEERING SPECIAL ──────────── */
+.sv-ve-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--sv-border);
+  border-radius: var(--sv-radius);
+  overflow: hidden;
+}
+.sv-ve-text {
+  background: var(--sv-card);
+  padding: 60px 48px;
+  display: flex; flex-direction: column; justify-content: center; gap: 20px;
+}
+.sv-ve-text h3 {
+  font-family: var(--f-display);
+  font-size: 2rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--sv-text); line-height: 1.05;
+}
+.sv-ve-text p { font-size: 0.9rem; color: var(--sv-muted); line-height: 1.75; }
+.sv-ve-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.sv-ve-tag {
+  padding: 6px 14px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: var(--sv-pill);
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--sv-gold);
+  letter-spacing: 0.06em;
+}
+.sv-ve-img {
+  overflow: hidden; position: relative;
+  background: var(--sv-bg3);
+  min-height: 360px;
+}
+.sv-ve-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.7s var(--ease-out);
+}
+.sv-ve-block:hover .sv-ve-img img { transform: scale(1.05); }
+
+/* ── OTHER SERVICES STRIP ───────────────── */
+.sv-others {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #0d1520, #111a2e);
+  border-top: 1px solid var(--sv-border);
+}
+.sv-others-header {
+  text-align: center; margin-bottom: 48px;
+}
+.sv-others h3 {
+  font-family: var(--f-display);
+  font-size: 2rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--sv-text); margin-bottom: 12px;
+}
+.sv-others p { color: var(--sv-muted); font-size: 0.9rem; }
+.sv-others-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.sv-other-card {
+  background: var(--sv-card);
+  border: 1px solid var(--sv-border);
+  border-radius: var(--sv-radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+.sv-other-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
+.sv-other-card-img {
+  aspect-ratio: 4/3; overflow: hidden;
+  background: var(--sv-bg3);
+}
+.sv-other-card-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(0.8) saturate(1.1);
+  transition: all 0.5s ease;
+}
+.sv-other-card:hover .sv-other-card-img img { filter: brightness(1); transform: scale(1.06); }
+.sv-other-card-body { padding: 20px 22px; }
+.sv-other-card-body h4 {
+  font-family: var(--f-display);
+  font-size: 1rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--sv-text); margin-bottom: 6px;
+}
+.sv-other-card-body p { font-size: 0.82rem; color: var(--sv-muted); }
+
+/* ── PROCESS TIMELINE ───────────────────── */
+.sv-process {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-radius: var(--sv-radius);
+  overflow: hidden;
+  background: var(--sv-border);
+  margin-top: 48px;
+}
+.sv-process-step {
+  background: var(--sv-card);
+  padding: 36px 28px;
+  position: relative;
+}
+.sv-process-step::after {
+  content: '→';
+  position: absolute;
+  right: -12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--sv-gold);
+  font-size: 1rem; font-weight: 800;
+  z-index: 2;
+  background: var(--sv-card);
+  padding: 4px;
+}
+.sv-process-step:last-child::after { display: none; }
+.sv-process-num {
+  font-family: var(--f-display);
+  font-size: 3rem; font-weight: 800;
+  color: rgba(201,168,76,0.15);
+  line-height: 1; margin-bottom: 12px;
+}
+.sv-process-step h4 {
+  font-family: var(--f-display);
+  font-size: 0.95rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--sv-text); margin-bottom: 8px;
+}
+.sv-process-step p { font-size: 0.82rem; color: var(--sv-muted); line-height: 1.6; }
+
+/* ── CTA BANNER ─────────────────────────── */
+.sv-cta {
+  background: var(--sv-gold);
+  padding: 80px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.sv-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(10,13,18,0.04),
+    rgba(10,13,18,0.04) 1px,
+    transparent 1px,
+    transparent 20px
+  );
+}
+.sv-cta-inner { position: relative; z-index: 1; }
+.sv-cta h2 {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sv-bg1);
+  margin-bottom: 16px;
+}
+.sv-cta p {
+  color: rgba(10,13,18,0.65);
+  font-size: 1.05rem;
+  max-width: 480px;
+  margin: 0 auto 36px;
+  line-height: 1.65;
+}
+.sv-cta .sv-cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.sv-cta .btn-cta-dark {
+  padding: 14px 32px;
+  background: var(--sv-bg1);
+  color: var(--sv-text);
+  border-radius: var(--sv-radius);
+  font-family: var(--f-display);
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+.sv-cta .btn-cta-dark:hover { background: #0f1420; transform: translateY(-2px); }
+.sv-cta .btn-cta-ghost {
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--sv-bg1);
+  border: 2px solid rgba(10,13,18,0.3);
+  border-radius: var(--sv-radius);
+  font-family: var(--f-display);
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+.sv-cta .btn-cta-ghost:hover { border-color: var(--sv-bg1); background: rgba(10,13,18,0.08); }
+
+/* ── SCROLL ANIMATION ───────────────────── */
+.sv-reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.sv-reveal.visible { opacity: 1; transform: none; }
+.sv-reveal-delay-1 { transition-delay: 0.1s; }
+.sv-reveal-delay-2 { transition-delay: 0.2s; }
+.sv-reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── IMAGE PLACEHOLDERS ─────────────────── */
+/* 
+  UPLOAD GUIDE:
+  Place your images from wellbuiltph.com/images/our-services/ into:
+  → static/images/services/
+  
+  Naming convention:
+  STRUCTURAL ASSESSMENT:
+    static/images/services/sa-coring.jpg          (Concrete Coring Works)
+    static/images/services/sa-chipping.jpg         (Actual Chipping)
+    static/images/services/sa-rebound.jpg          (Rebound Hammer)
+    static/images/services/sa-rebar.jpg            (Rebar Scanning)
+    static/images/services/sa-ultrasonic.jpg       (Ultrasonic Pulse)
+    static/images/services/sa-pulloff.jpg          (Pull-Off Testing)
+  RETROFITTING MANAGEMENT:
+    static/images/services/rm-investigation.jpg    (Site Investigation)
+    static/images/services/rm-planning.jpg         (Planning & Scheduling)
+    static/images/services/rm-methodology.jpg      (Retrofit Methodology)
+    static/images/services/rm-safety.jpg           (Retrofitting Safety)
+  RETROFITTING CONSTRUCTION:
+    static/images/services/rcd-jacketing.jpg       (Steel Jacketing)
+    static/images/services/rcd-enlargement.jpg     (Concrete Enlargement)
+    static/images/services/rcd-support.jpg         (Additional Support)
+    static/images/services/rcd-bracing.jpg         (Buckling Restrained Bracing)
+    static/images/services/rcd-carbonplate.jpg     (Pre-Stressed Carbon Plate)
+    static/images/services/rcd-frp.jpg             (Fiber Reinforced Polymer)
+  CONCRETE REPAIR:
+    static/images/services/cr-voids.jpg            (Concrete Voids/Honeycombs)
+    static/images/services/cr-grouting.jpg         (Concrete Grouting)
+    static/images/services/cr-cracks.jpg           (Crack Repairs)
+  VALUE ENGINEERING:
+    static/images/services/ve-main.jpg             (Value Engineering)
+  OTHER SERVICES:
+    static/images/services/other-sealant.jpg       (Sealant Application)
+    static/images/services/other-flooring.jpg      (Industrial Floor Coating)
+    static/images/services/other-seismic.jpg       (Seismic Joint System)
+*/
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media (max-width: 1100px) {
+  .sv-cards.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .sv-process { grid-template-columns: repeat(2, 1fr); }
+  .sv-process-step::after { display: none; }
+}
+@media (max-width: 900px) {
+  .sv-hero-card { grid-template-columns: 1fr; }
+  .sv-hero-card-img { min-height: 240px; }
+  .sv-ve-block { grid-template-columns: 1fr; }
+  .sv-ve-img { min-height: 280px; }
+  .sv-others-grid { grid-template-columns: 1fr 1fr; }
+  .sv-section-header { flex-direction: column; gap: 24px; }
+  .sv-section-desc { max-width: 100%; }
+}
+@media (max-width: 768px) {
+  .sv-cards { grid-template-columns: 1fr; }
+  .sv-cards.cols-2 { grid-template-columns: 1fr; }
+  .sv-card.wide { grid-column: span 1; }
+  .sv-photo-strip { grid-template-columns: repeat(2, 1fr); }
+  .sv-others-grid { grid-template-columns: 1fr; }
+  .sv-process { grid-template-columns: 1fr; }
+  .sv-hero h1 { font-size: 3rem; }
+  .sv-nav-item { padding: 14px 18px; font-size: 0.75rem; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════
+     HERO BAND
+══════════════════════════════════════════════════ -->
+<section class="sv-hero">
+  <div class="sv-hero-grid"></div>
+  <div class="sv-hero-glow"></div>
+  <div class="container sv-hero-content">
+    <div class="sv-breadcrumb">
+      <a href="{{ url_for('index') }}">Home</a>
+      <span class="bc-sep">/</span>
+      <span class="bc-active">Services</span>
+    </div>
+    <h1>
+      What We<br>
+      <em>Build &amp; Repair</em>
+    </h1>
+    <p class="sv-hero-desc">
+      Specialized structural engineering solutions backed by international certifications and 15+ years of Philippine project experience. From diagnostic assessment to full structural restoration — we cover the entire lifecycle.
+    </p>
+    <div class="sv-creds">
+      <span class="sv-cred"><span class="cred-dot"></span>ICRI Member</span>
+      <span class="sv-cred"><span class="cred-dot"></span>PCAB Licensed</span>
+      <span class="sv-cred"><span class="cred-dot"></span>ACI Certified</span>
+      <span class="sv-cred"><span class="cred-dot"></span>700+ Projects</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     STICKY SERVICE NAV
+══════════════════════════════════════════════════ -->
+<nav class="sv-sticky-nav" id="svNav">
+  <div class="container sv-sticky-inner">
+    <a href="#svc-sa"  class="sv-nav-item active" data-section="svc-sa">
+      <span class="sv-nav-num">01</span>Structural Assessment
+    </a>
+    <a href="#svc-rm"  class="sv-nav-item" data-section="svc-rm">
+      <span class="sv-nav-num">02</span>Retrofitting Management
+    </a>
+    <a href="#svc-rcd" class="sv-nav-item" data-section="svc-rcd">
+      <span class="sv-nav-num">03</span>Retrofitting Construction
+    </a>
+    <a href="#svc-cr"  class="sv-nav-item" data-section="svc-cr">
+      <span class="sv-nav-num">04</span>Concrete Repair
+    </a>
+    <a href="#svc-ve"  class="sv-nav-item" data-section="svc-ve">
+      <span class="sv-nav-num">05</span>Value Engineering
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     01 — STRUCTURAL ASSESSMENT
+══════════════════════════════════════════════════ -->
+<section class="sv-section" id="svc-sa">
+  <div class="container">
+    <div class="sv-section-header sv-reveal">
+      <div class="sv-section-title-block">
+        <div class="sv-section-index">Service 01</div>
+        <h2>Structural<br><span>Assessment</span></h2>
+      </div>
+      <div class="sv-section-desc">
+        Before any repair or retrofitting begins, understanding the true state of a structure is critical. Our assessment team uses the latest diagnostic technology to evaluate structural integrity with precision and thoroughness.
+        <a href="{{ url_for('apply') }}" class="sv-section-cta-link">Request Assessment →</a>
+      </div>
+    </div>
+
+    <!-- Destructive Testing Group -->
+    <div class="sv-reveal" style="margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span class="sv-card-type destructive" style="font-size: 0.7rem;">Destructive Testing</span>
+        <div style="flex: 1; height: 1px; background: var(--sv-border);"></div>
+      </div>
+      <div class="sv-cards cols-3">
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/sa-coring.jpg -->
+            {% if svc_images.get("sa-coring") %}
+            <img src="/{{ svc_images["sa-coring"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>SA-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">SA-</div>
+          {%- endif %}
+          </div>
+          <h3>Concrete Coring Works</h3>
+          <div class="sv-card-divider"></div>
+          <p>Core samples extracted on-site from structural elements are tested by a certified third-party laboratory to measure compressive strength and other critical concrete properties.</p>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/sa-chipping.jpg -->
+            {% if svc_images.get("sa-chipping") %}
+            <img src="/{{ svc_images["sa-chipping"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>SA-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">SA-</div>
+          {%- endif %}
+          </div>
+          <h3>Actual Chipping / Excavation</h3>
+          <div class="sv-card-divider"></div>
+          <p>Conventional site investigation where concrete cover is chipped off to expose reinforcing bars. Ideal for foundation and deep members where scanning technology is out of range.</p>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/sa-pulloff.jpg -->
+            {% if svc_images.get("sa-pulloff") %}
+            <img src="/{{ svc_images["sa-pulloff"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>SA-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">SA-</div>
+          {%- endif %}
+          </div>
+          <h3>Pull-Off Testing</h3>
+          <div class="sv-card-divider"></div>
+          <p>On-site testing to investigate surface tensile strength and adhesion properties of composite materials — including paints, epoxy, FRPs, and laminates — to substrate materials.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Semi-Destructive -->
+    <div class="sv-reveal" style="margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span class="sv-card-type semi" style="font-size: 0.7rem;">Semi-Destructive Testing</span>
+        <div style="flex: 1; height: 1px; background: var(--sv-border);"></div>
+      </div>
+      <div class="sv-cards cols-2">
+        <div class="sv-card wide">
+          <div class="sv-card-img" style="aspect-ratio: 21/8;">
+            <!-- Upload: static/images/services/sa-rebound.jpg -->
+            {% if svc_images.get("sa-rebound") %}
+            <img src="/{{ svc_images["sa-rebound"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>SA-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">SA-</div>
+          {%- endif %}
+          </div>
+          <h3>Rebound Hammer Test</h3>
+          <div class="sv-card-divider"></div>
+          <p>The hammer measures the rebound of a spring-loaded mass impacting the concrete surface at a defined energy. The rebound value, referenced against a conversion chart, determines the concrete's compressive strength accurately and efficiently.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Non-Destructive -->
+    <div class="sv-reveal">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span class="sv-card-type non-destructive" style="font-size: 0.7rem;">Non-Destructive Testing</span>
+        <div style="flex: 1; height: 1px; background: var(--sv-border);"></div>
+      </div>
+      <div class="sv-cards cols-2">
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/sa-rebar.jpg -->
+            {% if svc_images.get("sa-rebar") %}
+            <img src="/{{ svc_images["sa-rebar"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>SA-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">SA-</div>
+          {%- endif %}
+          </div>
+          <h3>Rebar Scanning</h3>
+          <div class="sv-card-divider"></div>
+          <p>On-site mapping and visualization of rebar spacing, sizes, and depth inside concrete structures — eliminating the need for conventional destructive chipping. Minimizes mishits during drilling and coring operations.</p>
+          <ul class="sv-card-bullet-list">
+            <li>Rebar spacing & depth mapping</li>
+            <li>Drill-path pre-clearance</li>
+            <li>Full structural visualization</li>
+          </ul>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/sa-ultrasonic.jpg -->
+            {% if svc_images.get("sa-ultrasonic") %}
+            <img src="/{{ svc_images["sa-ultrasonic"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>SA-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">SA-</div>
+          {%- endif %}
+          </div>
+          <h3>Ultrasonic Pulse Velocity</h3>
+          <div class="sv-card-divider"></div>
+          <p>Latest technology for investigating hardened concrete quality on-site. Measures ultrasonic pulse travel time — higher velocity indicates denser, uniform concrete with better strength. Also detects honeycombs, cold-joints, cracks, and discontinuities.</p>
+          <ul class="sv-card-bullet-list">
+            <li>Concrete quality mapping</li>
+            <li>Defect identification</li>
+            <li>Strength correlation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     02 — RETROFITTING MANAGEMENT
+══════════════════════════════════════════════════ -->
+<section class="sv-section" id="svc-rm">
+  <div class="container">
+    <div class="sv-section-header sv-reveal">
+      <div class="sv-section-title-block">
+        <div class="sv-section-index">Service 02</div>
+        <h2>Retrofitting<br><span>Management</span></h2>
+      </div>
+      <div class="sv-section-desc">
+        End-to-end project management for seismic and structural retrofitting projects — from initial investigation and planning through execution, quality assurance, and completion.
+        <a href="{{ url_for('apply') }}" class="sv-section-cta-link">Get a Quote →</a>
+      </div>
+    </div>
+
+    <!-- Process Timeline -->
+    <div class="sv-reveal" style="margin-bottom: 48px;">
+      <div class="sv-process">
+        <div class="sv-process-step">
+          <div class="sv-process-num">01</div>
+          <h4>Site Investigation</h4>
+          <p>Thorough structural condition recording, physical testing, and computer modeling to establish a complete baseline.</p>
+        </div>
+        <div class="sv-process-step">
+          <div class="sv-process-num">02</div>
+          <h4>Planning & Scheduling</h4>
+          <p>Detailed project schedule with contingencies for the unforeseen scenarios common in structural repair work.</p>
+        </div>
+        <div class="sv-process-step">
+          <div class="sv-process-num">03</div>
+          <h4>Retrofit Methodology</h4>
+          <p>Investigation-based selection of retrofit methodology conforming to site conditions and structural requirements.</p>
+        </div>
+        <div class="sv-process-step">
+          <div class="sv-process-num">04</div>
+          <h4>Safety Compliance</h4>
+          <p>Full adherence to standard safety regulations plus special precautions for specialty chemical applications.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="sv-cards cols-2 sv-reveal">
+      <div class="sv-card">
+        <div class="sv-card-img">
+          <!-- Upload: static/images/services/rm-investigation.jpg -->
+          {% if svc_images.get("rm-investigation") %}
+            <img src="/{{ svc_images["rm-investigation"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RM-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RM-</div>
+          {%- endif %}
+        </div>
+        <h3>Site Investigation &amp; Assessment</h3>
+        <div class="sv-card-divider"></div>
+        <p>Existing structural conditions are thoroughly recorded and analyzed through physical tests and advanced computer modeling to lay the foundation for a successful retrofit project.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-card-img">
+          <!-- Upload: static/images/services/rm-planning.jpg -->
+          {% if svc_images.get("rm-planning") %}
+            <img src="/{{ svc_images["rm-planning"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RM-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RM-</div>
+          {%- endif %}
+        </div>
+        <h3>Planning &amp; Scheduling</h3>
+        <div class="sv-card-divider"></div>
+        <p>Retrofitting projects follow meticulously planned schedules. Contingencies are built in for the unpredictable scenarios common in repair work — an area where our experience dramatically reduces cost and delay.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-card-img">
+          <!-- Upload: static/images/services/rm-methodology.jpg -->
+          {% if svc_images.get("rm-methodology") %}
+            <img src="/{{ svc_images["rm-methodology"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RM-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RM-</div>
+          {%- endif %}
+        </div>
+        <h3>Retrofit Methodology</h3>
+        <div class="sv-card-divider"></div>
+        <p>Investigation reports and structural analysis form the basis of every methodology selection. All approaches conform to site conditions and applicability of the chosen reinforcement method.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-card-img">
+          <!-- Upload: static/images/services/rm-safety.jpg -->
+          {% if svc_images.get("rm-safety") %}
+            <img src="/{{ svc_images["rm-safety"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RM-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RM-</div>
+          {%- endif %}
+        </div>
+        <h3>Retrofitting Safety</h3>
+        <div class="sv-card-divider"></div>
+        <p>Safety is the number one priority on every Well-Built site. Standard safety regulations are strictly followed with additional precautions for specialty chemical applications. MSDS available for all materials prior to use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     03 — RETROFITTING CONSTRUCTION & DESIGN
+══════════════════════════════════════════════════ -->
+<section class="sv-section" id="svc-rcd">
+  <div class="container">
+    <div class="sv-section-header sv-reveal">
+      <div class="sv-section-title-block">
+        <div class="sv-section-index">Service 03</div>
+        <h2>Retrofitting<br><span>Construction &amp; Design</span></h2>
+      </div>
+      <div class="sv-section-desc">
+        Design-build retrofitting capability spanning the full spectrum of modern strengthening solutions. We deploy high-performance materials proven across industrial, commercial, and infrastructure sectors.
+        <a href="{{ url_for('apply') }}" class="sv-section-cta-link">Inquire Now →</a>
+      </div>
+    </div>
+
+    <!-- Conventional Methods -->
+    <div class="sv-reveal" style="margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span style="font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sv-muted); padding: 4px 12px; border: 1px solid var(--sv-border); border-radius: 100px; white-space: nowrap;">Conventional Methods</span>
+        <div style="flex: 1; height: 1px; background: var(--sv-border);"></div>
+      </div>
+      <div class="sv-cards cols-3">
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/rcd-jacketing.jpg -->
+            {% if svc_images.get("rcd-jacketing") %}
+            <img src="/{{ svc_images["rcd-jacketing"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RCD</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RCD</div>
+          {%- endif %}
+          </div>
+          <h3>Steel Jacketing</h3>
+          <div class="sv-card-divider"></div>
+          <p>Structural strengthening by encasing elements with precision steel plates. Reduces required concrete section enlargement while providing significant strength gains.</p>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/rcd-enlargement.jpg -->
+            {% if svc_images.get("rcd-enlargement") %}
+            <img src="/{{ svc_images["rcd-enlargement"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RCD</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RCD</div>
+          {%- endif %}
+          </div>
+          <h3>Concrete Enlargement</h3>
+          <div class="sv-card-divider"></div>
+          <p>Encasing structural elements with additional concrete — the most cost-effective method. Best applied where headroom and space constraints are not a primary concern.</p>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/rcd-support.jpg -->
+            {% if svc_images.get("rcd-support") %}
+            <img src="/{{ svc_images["rcd-support"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RCD</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RCD</div>
+          {%- endif %}
+          </div>
+          <h3>Additional Support</h3>
+          <div class="sv-card-divider"></div>
+          <p>Adding structural members such as columns, beams, and supports. Structural steel is the preferred material for this approach due to its high strength-to-weight ratio.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced Methods -->
+    <div class="sv-reveal">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <span style="font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sv-gold); padding: 4px 12px; border: 1px solid rgba(201,168,76,0.25); border-radius: 100px; white-space: nowrap;">Advanced Technologies</span>
+        <div style="flex: 1; height: 1px; background: var(--sv-border);"></div>
+      </div>
+      <div class="sv-cards cols-3">
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/rcd-bracing.jpg -->
+            {% if svc_images.get("rcd-bracing") %}
+            <img src="/{{ svc_images["rcd-bracing"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RCD</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RCD</div>
+          {%- endif %}
+          </div>
+          <h3>Buckling Restrained Bracing</h3>
+          <div class="sv-card-divider"></div>
+          <p>Seismic upgrade bracing system designed to allow buildings to withstand cyclical lateral loadings — particularly earthquake-induced loading — through engineered brace combinations.</p>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/rcd-carbonplate.jpg -->
+            {% if svc_images.get("rcd-carbonplate") %}
+            <img src="/{{ svc_images["rcd-carbonplate"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RCD</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RCD</div>
+          {%- endif %}
+          </div>
+          <h3>Pre-Stressed Carbon Plate</h3>
+          <div class="sv-card-divider"></div>
+          <p>Latest method (2020) for flexural strengthening of long-span girders and beams. Derived from external post-tensioning principles — anchored at one end, tensioned at the other for maximum performance.</p>
+          <ul class="sv-card-bullet-list">
+            <li>Long-span beam strengthening</li>
+            <li>Bridge girder applications</li>
+            <li>Minimal section increase</li>
+          </ul>
+        </div>
+        <div class="sv-card">
+          <div class="sv-card-img">
+            <!-- Upload: static/images/services/rcd-frp.jpg -->
+            {% if svc_images.get("rcd-frp") %}
+            <img src="/{{ svc_images["rcd-frp"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>RCD</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">RCD</div>
+          {%- endif %}
+          </div>
+          <h3>Fiber Reinforced Polymer</h3>
+          <div class="sv-card-divider"></div>
+          <p>The latest technology for structural strengthening — FRP is many times stronger than steel at a fraction of the weight. First introduced in Japan in the 1980s; ACI-approved guidelines adopted in the late 1990s.</p>
+          <ul class="sv-card-bullet-list">
+            <li>Easy to install in tight spaces</li>
+            <li>Lightweight, high tensile strength</li>
+            <li>Carbon fiber wrapping systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     04 — CONCRETE REPAIR & RESTORATION
+══════════════════════════════════════════════════ -->
+<section class="sv-section" id="svc-cr">
+  <div class="container">
+    <div class="sv-section-header sv-reveal">
+      <div class="sv-section-title-block">
+        <div class="sv-section-index">Service 04</div>
+        <h2>Concrete Repair<br><span>&amp; Restoration</span></h2>
+      </div>
+      <div class="sv-section-desc">
+        Precision concrete rehabilitation restoring structural capacity and extending service life of aging infrastructure using internationally proven repair systems and methodologies.
+        <a href="{{ url_for('apply') }}" class="sv-section-cta-link">Request a Quote →</a>
+      </div>
+    </div>
+
+    <!-- Hero card -->
+    <div class="sv-hero-card sv-reveal" style="margin-bottom: 2px; border-radius: var(--sv-radius) var(--sv-radius) 0 0;">
+      <div class="sv-hero-card-img">
+        <!-- Upload: static/images/services/cr-cracks.jpg -->
+        {% if svc_images.get("cr-cracks") %}
+            <img src="/{{ svc_images["cr-cracks"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>CR-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">CR-</div>
+          {%- endif %}
+      </div>
+      <div class="sv-hero-card-body">
+        <span class="sv-card-type" style="margin-bottom: 8px;">Structural Cracks</span>
+        <h3>Crack Repair Systems</h3>
+        <p>Cracks in concrete are inevitable — but not all require the same treatment. Our engineers select the most appropriate method from routing &amp; sealing, gravity application, high-pressure, and low-pressure injection to achieve an economical, lasting repair.</p>
+        <ul class="sv-card-bullet-list" style="margin-top: 8px;">
+          <li>Routing &amp; sealing for surface cracks</li>
+          <li>Pressurized epoxy injection</li>
+          <li>Gravity method for deep penetration</li>
+          <li>Low-pressure polyurethane grouting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sv-cards cols-2 sv-reveal">
+      <div class="sv-card">
+        <div class="sv-card-img">
+          <!-- Upload: static/images/services/cr-voids.jpg -->
+          {% if svc_images.get("cr-voids") %}
+            <img src="/{{ svc_images["cr-voids"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>CR-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">CR-</div>
+          {%- endif %}
+        </div>
+        <h3>Concrete Voids &amp; Honeycombs</h3>
+        <div class="sv-card-divider"></div>
+        <p>Concrete defects resulting in section loss are rectified through multiple methods: hand patch, chip and patch, form and pour, or shotcrete. The engineer selects the best approach based on defect type, location, and structural requirements.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-card-img">
+          <!-- Upload: static/images/services/cr-grouting.jpg -->
+          {% if svc_images.get("cr-grouting") %}
+            <img src="/{{ svc_images["cr-grouting"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>CR-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">CR-</div>
+          {%- endif %}
+        </div>
+        <h3>Concrete Grouting Systems</h3>
+        <div class="sv-card-divider"></div>
+        <p>Non-shrink cementitious and polymer grouting works for heavy machinery foundations, high-vibration motor foundations, and column base plates. Critical for maintaining alignment and load transfer integrity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     05 — VALUE ENGINEERING
+══════════════════════════════════════════════════ -->
+<section class="sv-section" id="svc-ve">
+  <div class="container">
+    <div class="sv-section-header sv-reveal">
+      <div class="sv-section-title-block">
+        <div class="sv-section-index">Service 05</div>
+        <h2>Value<br><span>Engineering</span></h2>
+      </div>
+      <div class="sv-section-desc">
+        In collaboration with our Site Engineers, Structural Engineers, and Quantity Surveyors — we re-evaluate methodology, materials, and design to achieve the most economical solution without compromising structural integrity.
+        <a href="{{ url_for('apply') }}" class="sv-section-cta-link">Start a Consultation →</a>
+      </div>
+    </div>
+
+    <div class="sv-ve-block sv-reveal">
+      <div class="sv-ve-text">
+        <h3>Best Engineering<br>Per Peso Invested</h3>
+        <p>We help clients optimize structural repair costs without compromising safety or performance. Our multi-disciplinary team conducts thorough cost-benefit analyses to identify where alternative methodologies and materials can deliver equivalent or superior results at reduced cost.</p>
+        <div class="sv-ve-tags">
+          <span class="sv-ve-tag">Cost-Benefit Analysis</span>
+          <span class="sv-ve-tag">Material Optimization</span>
+          <span class="sv-ve-tag">Scope Review</span>
+          <span class="sv-ve-tag">Alternative Methodology</span>
+          <span class="sv-ve-tag">Technical Consultation</span>
+          <span class="sv-ve-tag">Quantity Surveying</span>
+        </div>
+      </div>
+      <div class="sv-ve-img">
+        <!-- Upload: static/images/services/ve-main.jpg -->
+        {% if svc_images.get("ve-main") %}
+            <img src="/{{ svc_images["ve-main"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>VE-</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">VE-</div>
+          {%- endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     OTHER SERVICES
+══════════════════════════════════════════════════ -->
+<section class="sv-others">
+  <div class="container">
+    <div class="sv-others-header sv-reveal">
+      <span class="section-eyebrow">Also Available</span>
+      <h3>Other Services</h3>
+      <p>Complementary specialty services to support your complete building maintenance and improvement needs.</p>
+    </div>
+    <div class="sv-others-grid sv-reveal">
+      <div class="sv-other-card">
+        <div class="sv-other-card-img">
+          <!-- Upload: static/images/services/other-sealant.jpg -->
+          {% if svc_images.get("other-sealant") %}
+            <img src="/{{ svc_images["other-sealant"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>OTH</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">OTH</div>
+          {%- endif %}
+        </div>
+        <div class="sv-other-card-body">
+          <h4>Sealant Application</h4>
+          <p>Professional sealant installation for joints, cracks, and interfaces to prevent water ingress and protect structural elements.</p>
+        </div>
+      </div>
+      <div class="sv-other-card">
+        <div class="sv-other-card-img">
+          <!-- Upload: static/images/services/other-flooring.jpg -->
+          {% if svc_images.get("other-flooring") %}
+            <img src="/{{ svc_images["other-flooring"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>OTH</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">OTH</div>
+          {%- endif %}
+        </div>
+        <div class="sv-other-card-body">
+          <h4>Industrial Floor Coating</h4>
+          <p>High-performance epoxy and polyurethane floor coatings for industrial, commercial, and warehouse environments.</p>
+        </div>
+      </div>
+      <div class="sv-other-card">
+        <div class="sv-other-card-img">
+          <!-- Upload: static/images/services/other-seismic.jpg -->
+          {% if svc_images.get("other-seismic") %}
+            <img src="/{{ svc_images["other-seismic"] }}" alt=""
+                 onerror="this.parentElement.innerHTML='<div class=sv-card-img-placeholder>OTH</div>'">
+          {%- else %}
+            <div class="sv-card-img-placeholder">OTH</div>
+          {%- endif %}
+        </div>
+        <div class="sv-other-card-body">
+          <h4>Seismic Joint System</h4>
+          <p>Installation of engineered seismic joint systems that accommodate building movement during seismic events while maintaining weatherproofing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     CTA BANNER
+══════════════════════════════════════════════════ -->
+<section class="sv-cta">
+  <div class="container sv-cta-inner sv-reveal">
+    <h2>Ready to Strengthen<br>Your Structure?</h2>
+    <p>Get a free consultation from our certified engineers. We assess, design, and deliver the right solution for your project.</p>
+    <div class="sv-cta-btns">
+      <a href="{{ url_for('apply') }}" class="btn-cta-dark">Request a Free Quote</a>
+      <a href="{{ url_for('contact') }}" class="btn-cta-ghost">Talk to an Engineer</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ── STICKY NAV ACTIVE STATE ──────────────── */
+(function() {
+  const navItems = document.querySelectorAll('.sv-nav-item[data-section]');
+  const sections = Array.from(navItems).map(item => document.getElementById(item.dataset.section)).filter(Boolean);
+
+  function onScroll() {
+    const scrollY = window.scrollY + 140;
+    let active = null;
+    sections.forEach(sec => {
+      if (sec.offsetTop <= scrollY) active = sec.id;
+    });
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.section === active);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Smooth scroll on click
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(item.dataset.section);
+      if (target) {
+        const offset = target.offsetTop - 140;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+
+/* ── SCROLL REVEAL ────────────────────────── */
+(function() {
+  const els = document.querySelectorAll('.sv-reveal');
+  if (!els.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(el => obs.observe(el));
+})();
+</script>
+{% endblock %}

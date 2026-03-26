@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block title %}{{ cms.get('global.navbar.logo_text','Well-Built') }} – Concrete Repair &amp; Retrofitting Philippines{% endblock %}
+
+{% block content %}
+
+<!-- ══ HERO ══════════════════════════════════════════ -->
+{% if cms.get('home.section.hero.visible','1') == '1' %}
+<section class="hero" id="hero">
+  <div class="hero-photo-bg">
+    {% if cms.get('home.hero.bg_image') %}
+      <img src="/{{ cms.get('home.hero.bg_image') }}" alt="Well-Built Construction" class="hero-photo-img">
+    {% else %}
+      <img src="{{ url_for('static', filename='images/hero-bg.png') }}" alt="Well-Built Construction" class="hero-photo-img">
+    {% endif %}
+    <div class="hero-photo-overlay"></div>
+    <div class="hero-photo-gradient"></div>
+    <div class="hero-grain"></div>
+  </div>
+
+  <div class="hero-float-badge">
+    <span class="pulse-dot"></span>
+    {{ cms.get('home.hero.badge', 'PCAB Licensed Specialty Contractor') }}
+  </div>
+
+  <div class="container hero-content">
+    <div class="hero-text-block">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        {{ cms.get('home.hero.eyebrow', "Philippines' #1 Structural Repair Specialists") }}
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-title-line">{{ cms.get('home.hero.title_line1', 'BUILT TO') }}</span>
+        <span class="hero-title-line hero-title-accent">{{ cms.get('home.hero.title_line2', 'LAST FOREVER.') }}</span>
+      </h1>
+      <p class="hero-subtitle">{{ cms.get('home.hero.subtitle', '') }}</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('apply') }}" class="btn btn-primary btn-lg hero-btn-main">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          {{ cms.get('home.hero.cta_primary', 'Request a Free Quote') }}
+        </a>
+        <a href="{{ url_for('projects') }}" class="btn btn-glass btn-lg">{{ cms.get('home.hero.cta_secondary', 'View Our Projects') }}</a>
+      </div>
+    </div>
+
+    <div class="hero-stats-row">
+      <div class="hero-stat-item">
+        <div class="stat-value"><span class="stat-num" data-target="{{ cms.get('home.hero.stat1_num','15') }}">0</span><span class="stat-suf">+</span></div>
+        <div class="stat-label">{{ cms.get('home.hero.stat1_label','Years in Business') }}</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat-item">
+        <div class="stat-value"><span class="stat-num" data-target="{{ cms.get('home.hero.stat2_num','700') }}">0</span><span class="stat-suf">+</span></div>
+        <div class="stat-label">{{ cms.get('home.hero.stat2_label','Projects Delivered') }}</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat-item">
+        <div class="stat-value"><span class="stat-num" data-target="{{ cms.get('home.hero.stat3_num','50') }}">0</span><span class="stat-suf">+</span></div>
+        <div class="stat-label">{{ cms.get('home.hero.stat3_label','Expert Engineers') }}</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat-item">
+        <div class="stat-value"><span class="stat-num" data-target="{{ cms.get('home.hero.stat4_num','200') }}">0</span><span class="stat-suf">+</span></div>
+        <div class="stat-label">{{ cms.get('home.hero.stat4_label','Happy Clients') }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <span>Scroll Down</span>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ TRUST BAR ══════════════════════════════════════ -->
+{% if cms.get('home.section.trustbar.visible','1') == '1' %}
+<div class="trust-bar">
+  <div class="trust-bar-label">TRUSTED BY</div>
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      {% set client_list = cms.get('home.clients.list','') %}
+      {% if client_list %}
+        {% for client in (client_list + '|' + client_list).split('|') %}
+          <span>{{ client.strip() }}</span><span class="mdot">◆</span>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- ══ SERVICES ══════════════════════════════════════ -->
+{% if cms.get('home.section.services.visible','1') == '1' %}
+<section class="section services-section" id="services">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">{{ cms.get('home.services.eyebrow','What We Do') }}</span>
+      <h2 class="section-title">{{ cms.get('home.services.title','Specialized Engineering Services') }}</h2>
+      <p class="section-desc">{{ cms.get('home.services.desc','') }}</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-index="01">
+        <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/><path d="M16 32l8-16 8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 28h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="service-content"><h3>Structural Assessment</h3><p>Comprehensive diagnostic services using destructive, semi-destructive, and non-destructive testing to evaluate structural integrity.</p><ul class="service-list"><li>Destructive Testing</li><li>Semi-Destructive Testing</li><li>Non-Destructive Testing</li></ul></div>
+        <a href="{{ url_for('services') }}" class="service-arrow">→</a>
+      </div>
+      <div class="service-card" data-index="02">
+        <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="28" width="32" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 28V16M24 28V12M32 28V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="service-content"><h3>Retrofitting Management</h3><p>Full-scope project management for seismic and structural retrofitting across commercial, industrial, and residential sectors.</p><ul class="service-list"><li>Project Planning &amp; Scheduling</li><li>Quality Control</li><li>On-site Management</li></ul></div>
+        <a href="{{ url_for('services') }}" class="service-arrow">→</a>
+      </div>
+      <div class="service-card" data-index="03">
+        <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M8 40V20l16-12 16 12v20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="18" y="28" width="12" height="12" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="service-content"><h3>Retrofitting Construction</h3><p>Design-build retrofitting using advanced FRP systems, steel jacketing, and carbon fiber strengthening technologies.</p><ul class="service-list"><li>FRP Systems</li><li>Carbon Fiber Wrapping</li><li>Steel Jacketing</li></ul></div>
+        <a href="{{ url_for('services') }}" class="service-arrow">→</a>
+      </div>
+      <div class="service-card" data-index="04">
+        <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M10 38c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="18" r="8" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="service-content"><h3>Concrete Repair &amp; Restoration</h3><p>Precision concrete rehabilitation restoring structural capacity and extending the service life of aging infrastructure.</p><ul class="service-list"><li>Crack Injection</li><li>Surface Restoration</li><li>Waterproofing</li></ul></div>
+        <a href="{{ url_for('services') }}" class="service-arrow">→</a>
+      </div>
+      <div class="service-card" data-index="05">
+        <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M8 32l10-10 8 8 14-16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="14" r="4" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="service-content"><h3>Value Engineering</h3><p>Cost-optimized solutions that maintain full structural integrity while maximizing project value per peso invested.</p><ul class="service-list"><li>Cost Analysis</li><li>Material Optimization</li><li>Technical Consulting</li></ul></div>
+        <a href="{{ url_for('services') }}" class="service-arrow">→</a>
+      </div>
+      <div class="service-card service-card-cta">
+        <div class="service-cta-content">
+          <div style="font-size:2rem;margin-bottom:12px">💬</div>
+          <h3>Need a custom solution?</h3>
+          <p>Every structure is unique. Our engineers will assess your specific needs and design the right approach.</p>
+          <a href="{{ url_for('apply') }}" class="btn btn-primary">{{ cms.get('home.hero.cta_primary','Get Free Consultation') }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ ABOUT STRIP ══════════════════════════════════ -->
+{% if cms.get('home.section.about.visible','1') == '1' %}
+<section class="about-strip">
+  <div class="container about-strip-inner">
+    <div class="about-strip-text">
+      <span class="section-eyebrow">{{ cms.get('home.about.eyebrow','Who We Are') }}</span>
+      <h2>{{ cms.get('home.about.title','The Concrete Surgeons of the Philippines') }}</h2>
+      <p>{{ cms.get('home.about.body1','') }}</p>
+      <p>{{ cms.get('home.about.body2','') }}</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+        <a href="{{ url_for('about') }}"   class="btn btn-dark">{{ cms.get('home.about.cta_story','Our Full Story →') }}</a>
+        <a href="{{ url_for('contact') }}" class="btn btn-outline-dark">{{ cms.get('home.about.cta_contact','Talk to an Engineer') }}</a>
+      </div>
+    </div>
+    <div class="about-strip-visual">
+      <div class="about-card-grid">
+        <div class="about-mini-card"><span class="mini-icon">🏆</span><strong>ICRI Member</strong><small>International Concrete Repair Institute</small></div>
+        <div class="about-mini-card"><span class="mini-icon">📋</span><strong>PCAB Licensed</strong><small>Philippine Contractors Accreditation Board</small></div>
+        <div class="about-mini-card"><span class="mini-icon">⚙️</span><strong>ACI Certified</strong><small>American Concrete Institute</small></div>
+        <div class="about-mini-card highlight"><span class="big-num">{{ cms.get('about.stats.years','15+') }}</span><strong>Years of Excellence</strong><small>Serving the Philippines since 2009</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ FEATURED PROJECTS ══════════════════════════════ -->
+{% if cms.get('home.section.projects.visible','1') == '1' %}
+<section class="section projects-section" id="projects">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">{{ cms.get('home.projects.eyebrow','Our Work') }}</span>
+      <h2 class="section-title">{{ cms.get('home.projects.title','Featured Projects') }}</h2>
+      <p class="section-desc">{{ cms.get('home.projects.desc','') }}</p>
+    </div>
+    <div class="projects-grid">
+      {% for project in projects %}
+      <div class="project-card">
+        <div class="project-img">
+          {% if project.image_path %}<img src="/{{ project.image_path }}" alt="{{ project.title }}" loading="lazy">
+          {% else %}<div class="project-placeholder"><span>{{ project.category[0] }}</span></div>{% endif %}
+          <div class="project-overlay"><span class="project-category-tag">{{ project.category }}</span></div>
+        </div>
+        <div class="project-info">
+          <h3>{{ project.title }}</h3>
+          <div class="project-meta"><span>{{ project.client }}</span><span>{{ project.year }}</span></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="section-cta">
+      <a href="{{ url_for('projects') }}" class="btn btn-outline-dark">{{ cms.get('home.projects.cta','View All Projects →') }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ WHY US ══════════════════════════════════════ -->
+{% if cms.get('home.section.why.visible','1') == '1' %}
+<section class="why-section">
+  <div class="container">
+    <div class="section-header light">
+      <span class="section-eyebrow">{{ cms.get('home.why.eyebrow','Why Well-Built') }}</span>
+      <h2 class="section-title">{{ cms.get('home.why.title','What Sets Us Apart') }}</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-num">{{ cms.get('home.why.card1_num','01') }}</div><h3>{{ cms.get('home.why.card1_title','Technical Excellence') }}</h3><p>{{ cms.get('home.why.card1_body','') }}</p></div>
+      <div class="why-card"><div class="why-num">{{ cms.get('home.why.card2_num','02') }}</div><h3>{{ cms.get('home.why.card2_title','Proven Track Record') }}</h3><p>{{ cms.get('home.why.card2_body','') }}</p></div>
+      <div class="why-card"><div class="why-num">{{ cms.get('home.why.card3_num','03') }}</div><h3>{{ cms.get('home.why.card3_title','Innovative Technology') }}</h3><p>{{ cms.get('home.why.card3_body','') }}</p></div>
+      <div class="why-card"><div class="why-num">{{ cms.get('home.why.card4_num','04') }}</div><h3>{{ cms.get('home.why.card4_title','End-to-End Solutions') }}</h3><p>{{ cms.get('home.why.card4_body','') }}</p></div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ CLIENTS ═══════════════════════════════════════ -->
+{% if cms.get('home.section.clients.visible','1') == '1' %}
+<section class="section clients-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">{{ cms.get('home.clients.eyebrow','Trusted By') }}</span>
+      <h2 class="section-title">{{ cms.get('home.clients.title','Our Satisfied Clients') }}</h2>
+      <p class="section-desc">{{ cms.get('home.clients.desc','') }}</p>
+    </div>
+    <div class="clients-grid">
+      {% set client_list = cms.get('home.clients.list','') %}
+      {% for client in client_list.split('|') if client.strip() %}
+        <div class="client-badge">{{ client.strip() }}</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══ CTA BANNER ═════════════════════════════════════ -->
+{% if cms.get('home.section.cta.visible','1') == '1' %}
+<section class="cta-banner">
+  <div class="container cta-content">
+    <h2>{{ cms.get('home.cta.title','Ready to strengthen your structure?') }}</h2>
+    <p>{{ cms.get('home.cta.body','') }}</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('apply') }}"   class="btn btn-primary btn-lg">{{ cms.get('home.cta.btn_primary','Request a Free Quote') }}</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-ghost btn-lg">{{ cms.get('home.cta.btn_secondary','Contact Our Team') }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Hero styles kept from original */
+.hero { position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; }
+.hero-photo-bg { position:absolute; inset:0; z-index:0; }
+.hero-photo-img { width:100%; height:100%; object-fit:cover; object-position:center 40%; transform:scale(1.02); animation:heroZoom 20s ease-out forwards; filter:brightness(1.06) contrast(1.1) saturate(1.15); will-change:transform; backface-visibility:hidden; }
+@keyframes heroZoom { from{transform:scale(1.02)} to{transform:scale(1.0)} }
+.hero-photo-overlay { position:absolute; inset:0; background:rgba(2,5,12,0.28); }
+.hero-photo-gradient { position:absolute; inset:0; background:linear-gradient(105deg,rgba(2,5,12,0.86) 0%,rgba(2,5,12,0.5) 38%,rgba(2,5,12,0) 65%),linear-gradient(to top,rgba(2,5,12,0.92) 0%,rgba(2,5,12,0.4) 22%,transparent 50%),linear-gradient(to bottom,rgba(2,5,12,0.5) 0%,transparent 15%); }
+.hero-grain { position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size:256px 256px; pointer-events:none; }
+.hero-float-badge { position:absolute; top:96px; right:40px; z-index:10; display:flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.4); backdrop-filter:blur(16px); border-radius:100px; font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--c-gold); animation:fadeIn 1s ease 1s both; }
+.pulse-dot { width:8px; height:8px; background:var(--c-gold); border-radius:50%; flex-shrink:0; animation:pulseDot 2s ease infinite; }
+@keyframes pulseDot { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.6)} 50%{box-shadow:0 0 0 7px rgba(201,168,76,0)} }
+.hero-content { position:relative; z-index:5; padding-top:calc(var(--nav-h) + 48px); padding-bottom:140px; display:flex; flex-direction:column; gap:0; }
+.hero-text-block { max-width:680px; }
+.hero-eyebrow { display:flex; align-items:center; gap:14px; font-size:0.76rem; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--c-gold); margin-bottom:22px; animation:fadeUp 0.7s ease 0.2s both; }
+.eyebrow-line { display:block; width:36px; height:2px; background:var(--c-gold); border-radius:2px; flex-shrink:0; }
+.hero-title { font-family:var(--f-display); font-size:clamp(4rem,10vw,8.5rem); font-weight:800; line-height:0.88; letter-spacing:0.01em; text-transform:uppercase; margin-bottom:28px; }
+.hero-title-line { display:block; color:var(--c-white); text-shadow:0 2px 40px rgba(0,0,0,0.5); animation:fadeUp 0.7s ease 0.3s both; }
+.hero-title-accent { color:var(--c-gold); animation-delay:0.42s; text-shadow:0 0 80px rgba(201,168,76,0.3),0 2px 40px rgba(0,0,0,0.5); }
+.hero-subtitle { font-size:1.08rem; color:rgba(232,236,244,0.8); line-height:1.78; max-width:540px; margin-bottom:40px; animation:fadeUp 0.7s ease 0.52s both; }
+.hero-subtitle strong { color:var(--c-white); font-weight:600; }
+.hero-actions { display:flex; gap:14px; flex-wrap:wrap; animation:fadeUp 0.7s ease 0.64s both; }
+.hero-btn-main { display:inline-flex; align-items:center; gap:10px; box-shadow:0 8px 40px rgba(201,168,76,0.35); }
+.hero-btn-main:hover { box-shadow:0 12px 56px rgba(201,168,76,0.55); }
+.btn-glass { display:inline-flex; align-items:center; gap:8px; padding:16px 32px; background:rgba(255,255,255,0.07); backdrop-filter:blur(16px); border:1.5px solid rgba(255,255,255,0.22); border-radius:var(--radius-sm); font-family:var(--f-display); font-size:1rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--c-white); transition:var(--transition); }
+.btn-glass:hover { background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.45); transform:translateY(-2px); }
+.hero-stats-row { display:flex; align-items:center; margin-top:64px; padding:24px 32px; background:rgba(8,11,20,0.6); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.07); border-radius:var(--radius); max-width:680px; animation:fadeUp 0.8s ease 0.78s both; }
+.hero-stat-item { flex:1; text-align:center; padding:0 12px; }
+.stat-value { display:flex; align-items:baseline; justify-content:center; gap:2px; margin-bottom:5px; }
+.stat-num { font-family:var(--f-display); font-size:2.4rem; font-weight:800; color:var(--c-white); line-height:1; }
+.stat-suf { font-family:var(--f-display); font-size:1.6rem; font-weight:800; color:var(--c-gold); line-height:1; }
+.stat-label { font-size:0.68rem; color:rgba(232,236,244,0.5); letter-spacing:0.1em; text-transform:uppercase; }
+.hero-stat-divider { width:1px; height:44px; background:rgba(255,255,255,0.1); flex-shrink:0; }
+.hero-scroll { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:10px; z-index:5; animation:fadeIn 1s ease 1.4s both; }
+.scroll-mouse { width:22px; height:36px; border:2px solid rgba(255,255,255,0.25); border-radius:11px; display:flex; align-items:flex-start; justify-content:center; padding-top:6px; }
+.scroll-wheel { width:4px; height:8px; background:var(--c-gold); border-radius:2px; animation:scrollWheel 2s ease infinite; }
+@keyframes scrollWheel { 0%{transform:translateY(0);opacity:1} 75%{transform:translateY(10px);opacity:0} 100%{transform:translateY(0);opacity:0} }
+.hero-scroll span { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3); }
+.trust-bar { background:var(--c-bg2); border-top:1px solid var(--c-border); border-bottom:1px solid var(--c-border); padding:20px 0; display:flex; align-items:center; overflow:hidden; }
+.trust-bar-label { font-family:var(--f-display); font-size:0.65rem; font-weight:700; letter-spacing:0.22em; color:var(--c-gold); white-space:nowrap; padding:0 32px; border-right:1px solid var(--c-border); flex-shrink:0; }
+.marquee-wrap { flex:1; overflow:hidden; }
+.marquee-track { display:flex; gap:28px; white-space:nowrap; animation:marqueeScroll 38s linear infinite; width:max-content; }
+.marquee-track span { font-family:var(--f-display); font-size:0.78rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--c-text-muted); }
+.mdot { color:var(--c-gold) !important; font-size:0.42rem; line-height:1; }
+@keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@media (max-width:900px){.hero-float-badge{display:none}}
+@media (max-width:768px){.hero-title{font-size:3.5rem}.hero-stats-row{flex-wrap:wrap;gap:24px;padding:20px;max-width:100%}.hero-stat-divider{display:none}.hero-stat-item{min-width:calc(50% - 12px)}.hero-actions{flex-direction:column;align-items:flex-start}.trust-bar-label{display:none}}
+</style>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{{ 'Edit' if project else 'Add' }} Project – Well-Built Admin{% endblock %}
+{% block page_title %}{{ 'Edit' if project else 'Add' }} Project{% endblock %}
+
+{% block admin_content %}
+<div class="admin-section">
+  <div class="section-header-row">
+    <h2 class="admin-section-title">{{ 'Edit Project' if project else 'New Project' }}</h2>
+    <a href="{{ url_for('admin_projects') }}" class="back-link">← Back to Projects</a>
+  </div>
+  <div class="form-card">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Project Title <span class="req">*</span></label>
+          <input type="text" name="title" value="{{ project.title if project else '' }}" required placeholder="e.g. LRT-1 Abad Santos Station">
+        </div>
+        <div class="form-group">
+          <label>Category <span class="req">*</span></label>
+          <select name="category" required>
+            <option value="">-- Select --</option>
+            {% for cat in ['Structural Assessment','Retrofitting','Concrete Repair','Value Engineering','Structural Strengthening'] %}
+            <option value="{{ cat }}" {{ 'selected' if project and project.category == cat }}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Client Name</label>
+          <input type="text" name="client" value="{{ project.client if project else '' }}" placeholder="e.g. LRTA">
+        </div>
+        <div class="form-group">
+          <label>Year</label>
+          <input type="number" name="year" value="{{ project.year if project else '' }}" placeholder="2024" min="2000" max="2030">
+        </div>
+      </div>
+      <div class="form-group full-width">
+        <label>Description</label>
+        <textarea name="description" rows="4" placeholder="Brief description of the project scope and scope of work...">{{ project.description if project else '' }}</textarea>
+      </div>
+      <div class="form-group full-width">
+        <label>Project Image</label>
+        <input type="file" name="image" accept=".jpg,.jpeg,.png,.gif">
+        {% if project and project.image_path %}
+          <div class="current-image">
+            <img src="/{{ project.image_path }}" alt="Current image" style="max-width:200px;margin-top:8px;border-radius:8px">
+            <small>Current image (upload new to replace)</small>
+          </div>
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="featured" {{ 'checked' if project and project.featured }}>
+          <span>Feature this project on the homepage</span>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-admin-primary">{{ 'Update Project' if project else 'Add Project' }}</button>
+        <a href="{{ url_for('admin_projects') }}" class="btn-admin-cancel">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

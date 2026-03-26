@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}Apply / Get a Quote – {{ cms.get('global.navbar.logo_text','Well-Built') }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <span class="section-eyebrow">{{ cms.get('apply.header.eyebrow','Get Started') }}</span>
+    <h1>{{ cms.get('apply.header.title','Apply or Request a Service') }}</h1>
+    <p>{{ cms.get('apply.header.subtitle','') }}</p>
+  </div>
+</div>
+
+<section class="section apply-section">
+  <div class="container apply-container">
+
+    <div class="apply-info">
+      <div class="apply-info-card">
+        <h3>{{ cms.get('apply.info.title','Why Contact Us?') }}</h3>
+        <div class="apply-feature">
+          <div class="apply-feature-icon">{{ cms.get('apply.info.feat1_icon','⚡') }}</div>
+          <div><strong>{{ cms.get('apply.info.feat1_title','Fast Response') }}</strong><p>{{ cms.get('apply.info.feat1_body','') }}</p></div>
+        </div>
+        <div class="apply-feature">
+          <div class="apply-feature-icon">{{ cms.get('apply.info.feat2_icon','🔬') }}</div>
+          <div><strong>{{ cms.get('apply.info.feat2_title','Expert Assessment') }}</strong><p>{{ cms.get('apply.info.feat2_body','') }}</p></div>
+        </div>
+        <div class="apply-feature">
+          <div class="apply-feature-icon">{{ cms.get('apply.info.feat3_icon','📋') }}</div>
+          <div><strong>{{ cms.get('apply.info.feat3_title','Free Consultation') }}</strong><p>{{ cms.get('apply.info.feat3_body','') }}</p></div>
+        </div>
+        <div class="apply-feature">
+          <div class="apply-feature-icon">{{ cms.get('apply.info.feat4_icon','🏆') }}</div>
+          <div><strong>{{ cms.get('apply.info.feat4_title','Proven Expertise') }}</strong><p>{{ cms.get('apply.info.feat4_body','') }}</p></div>
+        </div>
+      </div>
+      <div class="apply-contact-direct">
+        <p><strong>Prefer to call?</strong></p>
+        <a href="tel:{{ cms.get('apply.info.phone','') }}">{{ cms.get('apply.info.phone','') }}</a>
+        <br>
+        <a href="mailto:{{ cms.get('apply.info.email','') }}">{{ cms.get('apply.info.email','') }}</a>
+      </div>
+    </div>
+
+    <div class="apply-form-wrap">
+      <div class="form-type-toggle">
+        <button class="type-btn active" data-type="service">🔧 Service Inquiry</button>
+        <button class="type-btn" data-type="job">💼 Job Application</button>
+      </div>
+
+      <form class="apply-form" method="POST" enctype="multipart/form-data" novalidate>
+        <input type="hidden" name="type" id="formType" value="service">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="full_name">Full Name <span class="req">*</span></label>
+            <input type="text" id="full_name" name="full_name" placeholder="Juan dela Cruz" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="juan@company.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+63 9XX XXX XXXX" required>
+          </div>
+          <div class="form-group">
+            <label for="position_service" id="positionLabel">Service Needed <span class="req">*</span></label>
+            <select id="position_service" name="position_service" required>
+              <option value="">-- Select --</option>
+              <optgroup label="Services" id="serviceOptions">
+                <option value="Structural Assessment">Structural Assessment</option>
+                <option value="Retrofitting Management">Retrofitting Management</option>
+                <option value="Retrofitting Construction & Design">Retrofitting Construction &amp; Design</option>
+                <option value="Concrete Repair & Restoration">Concrete Repair &amp; Restoration</option>
+                <option value="Value Engineering">Value Engineering</option>
+                <option value="General Inquiry">General Inquiry</option>
+              </optgroup>
+              <optgroup label="Positions" id="jobOptions" style="display:none">
+                <option value="Structural Engineer">Structural Engineer</option>
+                <option value="Civil Engineer">Civil Engineer</option>
+                <option value="Project Manager">Project Manager</option>
+                <option value="Site Supervisor">Site Supervisor</option>
+                <option value="CAD Technician">CAD Technician</option>
+                <option value="Other Position">Other Position</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="message">Message / Details</label>
+          <textarea id="message" name="message" rows="5" placeholder="Describe your project, structure type, location…"></textarea>
+          <span class="char-count"><span id="charCount">0</span>/500</span>
+        </div>
+        <div class="form-group full-width file-group">
+          <label for="file" id="fileLabel">Attach Documents (Optional)</label>
+          <div class="file-drop-area" id="fileDrop">
+            <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            <div class="file-drop-content">
+              <span class="file-icon">📎</span>
+              <p><strong>Click to upload</strong> or drag &amp; drop</p>
+              <small>PDF, DOC, JPG — Max 16MB</small>
+            </div>
+            <div class="file-selected" id="fileSelected" style="display:none">
+              <span class="file-icon">✅</span>
+              <p id="fileName">file.pdf</p>
+              <button type="button" id="removeFile">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <div class="form-checkbox">
+            <input type="checkbox" id="privacy" required>
+            <label for="privacy">I agree to the <a href="#">privacy policy</a> and consent to being contacted.</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-full">
+          <span class="btn-text">Submit Inquiry</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const typeButtons = document.querySelectorAll('.type-btn');
+const formTypeInput = document.getElementById('formType');
+const positionLabel = document.getElementById('positionLabel');
+const serviceOptions = document.getElementById('serviceOptions');
+const jobOptions = document.getElementById('jobOptions');
+const fileLabel = document.getElementById('fileLabel');
+const select = document.getElementById('position_service');
+typeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    typeButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const type = btn.dataset.type;
+    formTypeInput.value = type;
+    select.value = '';
+    if (type === 'job') {
+      positionLabel.innerHTML = 'Position Applying For <span class="req">*</span>';
+      serviceOptions.style.display = 'none';
+      jobOptions.style.display = '';
+      fileLabel.textContent = 'Attach CV / Resume (Optional)';
+    } else {
+      positionLabel.innerHTML = 'Service Needed <span class="req">*</span>';
+      serviceOptions.style.display = '';
+      jobOptions.style.display = 'none';
+      fileLabel.textContent = 'Attach Documents (Optional)';
+    }
+  });
+});
+const messageField = document.getElementById('message');
+const charCount = document.getElementById('charCount');
+messageField.addEventListener('input', () => { charCount.textContent = messageField.value.length; });
+const fileInput = document.getElementById('file');
+const fileDrop = document.getElementById('fileDrop');
+const fileSelected = document.getElementById('fileSelected');
+const fileNameEl = document.getElementById('fileName');
+const removeFileBtn = document.getElementById('removeFile');
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) {
+    fileNameEl.textContent = fileInput.files[0].name;
+    fileDrop.querySelector('.file-drop-content').style.display = 'none';
+    fileSelected.style.display = 'flex';
+  }
+});
+removeFileBtn.addEventListener('click', () => {
+  fileInput.value = '';
+  fileDrop.querySelector('.file-drop-content').style.display = 'flex';
+  fileSelected.style.display = 'none';
+});
+</script>
+{% endblock %}
