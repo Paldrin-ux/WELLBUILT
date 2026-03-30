@@ -248,7 +248,7 @@ def init_db():
 
     c.execute('''CREATE TABLE IF NOT EXISTS projects (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL, category TEXT NOT NULL, description TEXT,
+        title TEXT NOT NULL UNIQUE, category TEXT NOT NULL, description TEXT,
         image_path TEXT, client TEXT, year INTEGER, featured INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
 
@@ -295,17 +295,19 @@ def init_db():
     for slot in SERVICE_IMAGE_SLOTS:
         c.execute("INSERT OR IGNORE INTO service_images (slot_key, image_path) VALUES (?, NULL)", (slot['key'],))
 
-    # Seed sample projects
-    sample_projects = [
-        ('LRT-1 Abad Santos Station', 'Retrofitting', 'Concrete repair and structural assessment for the LRT-1 Abad Santos Station.', None, 'LRTA', 2022, 1),
-        ('Metro Star Complex', 'Concrete Repair', 'Full concrete restoration and waterproofing services.', None, 'Metrostar', 2021, 1),
-        ('MIRDC Building', 'Structural Assessment', 'Comprehensive structural assessment and retrofitting works.', None, 'MIRDC', 2020, 1),
-        ('National Teachers College', 'Retrofitting', 'Seismic retrofitting and structural strengthening project.', None, 'NTC', 2023, 1),
-        ('Waterfront Hotel', 'Concrete Repair', 'Facade concrete repair and restoration works.', None, 'Waterfront', 2022, 0),
-        ('SM Mall Expansion', 'Value Engineering', 'Value engineering consultation for mall expansion project.', None, 'SM Prime', 2023, 1),
-    ]
-    for p in sample_projects:
-        c.execute("INSERT OR IGNORE INTO projects (title,category,description,image_path,client,year,featured) VALUES (?,?,?,?,?,?,?)", p)
+    # Seed sample projects — only runs if the projects table is completely empty
+    existing_projects = conn.execute("SELECT COUNT(*) as c FROM projects").fetchone()['c']
+    if existing_projects == 0:
+        sample_projects = [
+            ('LRT-1 Abad Santos Station', 'Retrofitting', 'Concrete repair and structural assessment for the LRT-1 Abad Santos Station.', None, 'LRTA', 2022, 1),
+            ('Metro Star Complex', 'Concrete Repair', 'Full concrete restoration and waterproofing services.', None, 'Metrostar', 2021, 1),
+            ('MIRDC Building', 'Structural Assessment', 'Comprehensive structural assessment and retrofitting works.', None, 'MIRDC', 2020, 1),
+            ('National Teachers College', 'Retrofitting', 'Seismic retrofitting and structural strengthening project.', None, 'NTC', 2023, 1),
+            ('Waterfront Hotel', 'Concrete Repair', 'Facade concrete repair and restoration works.', None, 'Waterfront', 2022, 0),
+            ('SM Mall Expansion', 'Value Engineering', 'Value engineering consultation for mall expansion project.', None, 'SM Prime', 2023, 1),
+        ]
+        for p in sample_projects:
+            c.execute("INSERT INTO projects (title,category,description,image_path,client,year,featured) VALUES (?,?,?,?,?,?,?)", p)
 
     # Seed about timeline
     timeline_rows = conn.execute("SELECT COUNT(*) as c FROM about_timeline").fetchone()['c']
